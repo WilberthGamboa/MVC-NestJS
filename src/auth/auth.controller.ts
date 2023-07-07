@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Render } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Render, Res, UsePipes, ValidationPipe, Session, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+
+import { response } from 'express';
+import { validate, validateOrReject } from 'class-validator';
+import { userValidation } from './entities/validate/user.validate';
 
 @Controller('auth')
 export class AuthController {
@@ -10,6 +12,7 @@ export class AuthController {
     @Render('auth/register')
     viewRegister(){
       
+      
     }
 
     @Get('login')
@@ -17,5 +20,17 @@ export class AuthController {
     viewLogin(){
       
     }
-  
+    
+  @Post('register')
+   create(@Body() body, @Res() response, @Req() request) {
+    const errors = userValidation(body);
+    console.log(errors);
+
+    if (errors.length!=0) {
+      return response.render('auth/register', { errors }); // Utiliza render en lugar de redirect
+    }
+    return response.redirect('/auth/login');
+  }
+    
 }
+

@@ -7,5 +7,14 @@
   <body>
     <h1>REGISTER</h1>
     {{> main}}
+
+    <form action="register" method="post">
+        <input type="text" name="name">
+        <input type="text" name="password">
+        <input type="text" name="lastName">
+        <input type="text" name="email">
+  {{errors}}
+    <input type="submit">
+    </form>
   </body>
 </html>
