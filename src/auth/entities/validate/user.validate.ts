@@ -18,5 +18,6 @@ export const userValidation = (body) =>{
             error.push('Ingresa un email');
         }
     }
+    
     return error;
 }

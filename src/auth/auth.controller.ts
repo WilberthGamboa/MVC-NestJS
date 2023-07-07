@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Render, Res, UsePipes, ValidationPipe, Session, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
-import { response } from 'express';
 import { validate, validateOrReject } from 'class-validator';
 import { userValidation } from './entities/validate/user.validate';
 
@@ -29,8 +28,23 @@ export class AuthController {
     if (errors.length!=0) {
       return response.render('auth/register', { errors }); // Utiliza render en lugar de redirect
     }
+    const user = {
+      ...body
+    }
+    request.session.user = user;
     return response.redirect('/auth/login');
   }
+
+
+  @Get('test')
+  test(@Res() response,@Req() request){
+    if ( !request.session.user) {
+      return response.redirect('/');
+    }
+    return response.render('auth/test');
+  }
+
+  
     
 }
 

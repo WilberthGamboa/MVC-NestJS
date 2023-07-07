@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import { create, engine } from 'express-handlebars';
 import * as hbs from 'hbs';
 import { ValidationPipe } from '@nestjs/common';
+import * as session from 'express-session';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
@@ -14,7 +15,13 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('hbs');
   hbs.registerPartials(join(__dirname, '..', '/views/partials'));
-  
+  app.use(
+    session({
+      secret: 'pcShare',
+      resave: false,
+      saveUninitialized: false,
+    }),
+  );
   await app.listen(3000);
 }
 bootstrap();
