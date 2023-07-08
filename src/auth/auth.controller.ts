@@ -23,6 +23,13 @@ export class AuthController {
     @Render('auth/login')
     viewLogin(@Body() body:Request, @Res() response:Response, @Session() session: Record<string, any>){
      
+     
+      
+    }
+
+    @Post('login')
+    createLogin(@Body() body:Request,@Session() session: Record<string, any>,@Res() response:Response) {
+ 
       if(Object.keys(body).length === 0){
         return;
      }
@@ -30,13 +37,11 @@ export class AuthController {
       ...body
     }
     session.user= user;
-    response.render('userPc/myPcs') 
-      
-    }
+    response.redirect('/myPcs')
+   
 
-    @Post('register')
-    createLogin(@Body() body:Request, @Res() response:Response) {
-      this.authService.create(body,response)
+  
+      
    }
 
     
