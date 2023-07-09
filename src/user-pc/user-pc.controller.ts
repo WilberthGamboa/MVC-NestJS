@@ -1,24 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Session, Redirect, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Session, Redirect, Res, UseGuards, UseFilters } from '@nestjs/common';
 import { UserPcService } from './user-pc.service';
 import { Response } from 'express';
+import { AuthenticatedGuard } from 'src/common/guards/authenticated.guard';
+import { AuthExceptionFilter } from 'src/common/filters/auth-exceptions.filter';
 
 
 @Controller('myPcs')
+@UseFilters(AuthExceptionFilter)
 export class UserPcController {
   constructor(private readonly userPcService: UserPcService) {}
 
-
+  @UseGuards(AuthenticatedGuard)
   @Get('/')
-  
   getAll(@Res() res:Response,@Session() session: Record<string, any>){
  
-    if (session.user===undefined) {
-      console.log('dentro de login')
-      res.redirect('auth/login')
-    }else{
-      console.log('fuera de login')
-      res.render('userPc/myPcs')
-    }
    
   }
 }

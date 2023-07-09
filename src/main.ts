@@ -6,6 +6,8 @@ import { create, engine } from 'express-handlebars';
 import * as hbs from 'hbs';
 import { ValidationPipe } from '@nestjs/common';
 import * as session from 'express-session';
+import * as passport from 'passport';
+import flash = require('connect-flash');
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
@@ -22,8 +24,12 @@ async function bootstrap() {
       saveUninitialized: false,
     }),
   );
-  
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use(flash());
   await app.listen(3000);
 }
 bootstrap();
+
+
 

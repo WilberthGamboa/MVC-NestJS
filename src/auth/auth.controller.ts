@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Render, Res, UsePipes, ValidationPipe, Session, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Render, Res, UsePipes, ValidationPipe, Session, Req, UseGuards, UseFilters } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { userValidation } from './entities/validate/user.validate';
 import { Request, Response } from 'express';
+import { AuthenticatedGuard } from 'src/common/guards/authenticated.guard';
+import { AuthExceptionFilter } from 'src/common/filters/auth-exceptions.filter';
 
 @Controller('auth')
+@UseFilters(AuthExceptionFilter)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
     @Get('register')
@@ -26,17 +29,10 @@ export class AuthController {
      
       
     }
-
+    @UseGuards(AuthenticatedGuard)
     @Post('login')
     createLogin(@Body() body:Request,@Session() session: Record<string, any>,@Res() response:Response) {
  
-      if(Object.keys(body).length === 0){
-        return;
-     }
-     const user = {
-      ...body
-    }
-    session.user= user;
     response.redirect('/myPcs')
    
 
