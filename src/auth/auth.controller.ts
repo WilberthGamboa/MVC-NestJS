@@ -32,7 +32,7 @@ export class AuthController {
     @UseGuards(AuthenticatedGuard)
     @Post('login')
     createLogin(@Body() body:Request,@Session() session: Record<string, any>,@Res() response:Response) {
- 
+      console.log('no ha pasado')
     response.redirect('/myPcs')
    
 
