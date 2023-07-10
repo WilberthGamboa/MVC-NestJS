@@ -4,6 +4,7 @@ import { userValidation } from './entities/validate/user.validate';
 import { Request, Response } from 'express';
 import { AuthenticatedGuard } from 'src/common/guards/authenticated.guard';
 import { AuthExceptionFilter } from 'src/common/filters/auth-exceptions.filter';
+import { LoginGuard } from 'src/common/guards/login.guard';
 
 @Controller('auth')
 @UseFilters(AuthExceptionFilter)
@@ -29,9 +30,9 @@ export class AuthController {
      
       
     }
-    @UseGuards(AuthenticatedGuard)
+    @UseGuards(LoginGuard)
     @Post('login')
-    createLogin(@Body() body:Request,@Session() session: Record<string, any>,@Res() response:Response) {
+    createLogin(@Req() req:Request,@Session() session: Record<string, any>,@Res() response:Response) {
       console.log('no ha pasado')
     response.redirect('/myPcs')
    

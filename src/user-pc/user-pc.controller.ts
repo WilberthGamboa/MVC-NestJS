@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Session, Redirect, Res, UseGuards, UseFilters } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Session, Redirect, Res, UseGuards, UseFilters, Render } from '@nestjs/common';
 import { UserPcService } from './user-pc.service';
 import { Response } from 'express';
 import { AuthenticatedGuard } from 'src/common/guards/authenticated.guard';
@@ -11,9 +11,10 @@ export class UserPcController {
   constructor(private readonly userPcService: UserPcService) {}
 
   @UseGuards(AuthenticatedGuard)
+  @Render('userPc/myPcs')
   @Get('/')
   getAll(@Res() res:Response,@Session() session: Record<string, any>){
- 
+  
    
   }
 }

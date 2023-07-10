@@ -11,8 +11,8 @@ export class AuthService {
       this.users = [
         {
           userId: 1,
-          username: 'john',
-          password: 'changeme',
+          username: 'w',
+          password: 'w',
           pet: { name: 'alfred', picId: 1 },
         },
         {
