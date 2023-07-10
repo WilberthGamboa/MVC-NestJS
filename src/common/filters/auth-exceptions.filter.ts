@@ -19,13 +19,19 @@ export class AuthExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<IRequestFlash>();
+    console.log(request.route)
+    console.log(request.url)
+    console.log(request.originalUrl)
 
     if (
       exception instanceof UnauthorizedException ||
       exception instanceof ForbiddenException
     ) {
-      request.flash('loginError', 'Please try again!');
-      response.redirect('/')
+      if (request.url!='/myPcs') {
+        request.flash('errors', 'Please try again!');
+      }
+      
+      response.redirect('/auth/login')
     } else {
       response.redirect('/error');
     }
