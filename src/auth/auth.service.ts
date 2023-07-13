@@ -1,49 +1,26 @@
 import { Injectable } from '@nestjs/common';
-
-import { Request, Response } from 'express';
-
+import { CreateAuthDto } from './dto/create-auth.dto';
+import { UpdateAuthDto } from './dto/update-auth.dto';
 
 @Injectable()
 export class AuthService {
-    users: { userId: number; username: string; password: string; pet: { name: string; picId: number; }; }[];
+  create(createAuthDto: CreateAuthDto) {
+    return 'This action adds a new auth';
+  }
 
-    constructor(){
-      this.users = [
-        {
-          userId: 1,
-          username: 'w',
-          password: 'w',
-          pet: { name: 'alfred', picId: 1 },
-        },
-        {
-          userId: 2,
-          username: 'chris',
-          password: 'secret',
-          pet: { name: 'gopher', picId: 2 },
-        },
-        {
-          userId: 3,
-          username: 'maria',
-          password: 'guess',
-          pet: { name: 'jenny', picId: 3 },
-        },
-      ];
-    }
-       // TODO: validar que los datos correctamente
-   
+  findAll() {
+    return `This action returns all auth`;
+  }
 
-     async findOne(username: string): Promise<any> {
-      return this.users.find(user => user.username === username);
-    }
-    async validateUser(username, pass): Promise<any> {
-      const user = await this.findOne(username);
-      if (user && user.password === pass) {
-        const { password, ...result } = user;
-        return result;
-      }
-      return null;
-    }
+  findOne(id: number) {
+    return `This action returns a #${id} auth`;
+  }
 
-    
+  update(id: number, updateAuthDto: UpdateAuthDto) {
+    return `This action updates a #${id} auth`;
+  }
 
+  remove(id: number) {
+    return `This action removes a #${id} auth`;
+  }
 }
