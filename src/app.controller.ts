@@ -1,11 +1,16 @@
 
-import { Get, Controller, Render } from '@nestjs/common';
+import { Get, Controller, Render, UseFilters } from '@nestjs/common';
+import { NotFoundFilter } from './common/filters/auth-exceptions.filter';
+
 
 @Controller()
+@UseFilters(NotFoundFilter)
 export class AppController {
-  @Get()
+  @Get('/')
   @Render('index')
   root() {
     return;
   }
+
+
 }

@@ -7,6 +7,7 @@ import {
     UnauthorizedException,
     ForbiddenException,
     BadRequestException,
+    NotFoundException,
   } from '@nestjs/common';
   import { Request, Response } from 'express';
   
@@ -15,29 +16,28 @@ import {
   }
   
   @Catch(HttpException)
-  export class AuthExceptionFilter implements ExceptionFilter {
+  export class NotFoundFilter implements ExceptionFilter {
     catch(exception: HttpException, host: ArgumentsHost) {
       const ctx = host.switchToHttp();
       const response = ctx.getResponse<Response>();
       const request = ctx.getRequest<IRequestFlash>();
      
-      
+      console.log("hola desde not found ")
       const errorResponse = exception.getResponse() as {
         statusCode: number;
         message: string | string[];
         error: string;
       };
     
-    
+   
       if (
-        exception instanceof BadRequestException
+        exception instanceof NotFoundException
       ) {
-        console.log(errorResponse)
-        request.flash('messages', errorResponse.message);
-        response.redirect('/auth/register')
+       
+        response.render('errors/404')
       } else {
        
-        response.redirect('/error')
+       
       }
     }
   }
