@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './entities/user.entity';
@@ -16,7 +16,26 @@ constructor(
   private readonly userModel: Model<User>
 
 ){
-
+  this.users = [
+    {
+      userId: 1,
+      username: 'w',
+      password: 'w',
+      pet: { name: 'alfred', picId: 1 },
+    },
+    {
+      userId: 2,
+      username: 'chris',
+      password: 'secret',
+      pet: { name: 'gopher', picId: 2 },
+    },
+    {
+      userId: 3,
+      username: 'maria',
+      password: 'guess',
+      pet: { name: 'jenny', picId: 3 },
+    },
+  ];
 }
 
   async createUser(createAuthDto:CreateUserDto){
@@ -26,9 +45,23 @@ constructor(
       console.log(error.code)
       this.handleDbException(error)
     }
+  }
 
+  async validateUser(email:string,password:string):Promise<any> {
+   
+      
+     
+      const user = await  this.userModel.findOne({email})
+      console.log(user)
 
+     
 
+      if (!user||user?.password!=password ) {
+        throw new UnauthorizedException('Usuario o contraseña no válidos')
+      }
+      return user;
+     
+   
   }
 
   private handleDbException(error:any){

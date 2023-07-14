@@ -35,9 +35,36 @@ import {
         console.log(errorResponse)
         request.flash('messages', errorResponse.message);
         response.redirect('/auth/register')
-      } else {
-       
-        response.redirect('/error')
+      } 
+      else if (
+        exception instanceof UnauthorizedException
+      ) {
+        if (errorResponse.message==='Unauthorized'){
+            errorResponse.message=''
+            const messages = [];
+            if (request.body.username==='') {
+              messages.push('El username no puede estar vacio')
+            }
+            if (request.body.password==='') {
+              messages.push('La contraseña no puede estar vacia')
+            }
+            errorResponse.message=messages
+        }
+
+        
+
+
+        
+        request.flash('messages', errorResponse.message);
+        response.redirect('/auth/login')
+        
+      } 
+     
+      else{
+        response.redirect('/auth/login')
       }
+
+
+
     }
   }

@@ -1,6 +1,6 @@
 
 import { Get, Controller, Render, UseFilters } from '@nestjs/common';
-import { NotFoundFilter } from './common/filters/auth-exceptions.filter';
+import { NotFoundFilter } from './common/filters/notFoundFilter-exceptions.filter';
 
 
 @Controller()
