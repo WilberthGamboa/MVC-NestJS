@@ -50,11 +50,6 @@ import {
             }
             errorResponse.message=messages
         }
-
-        
-
-
-        
         request.flash('messages', errorResponse.message);
         response.redirect('/auth/login')
         

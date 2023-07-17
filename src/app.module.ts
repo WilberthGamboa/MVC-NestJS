@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { APP_FILTER } from '@nestjs/core';
 import { NotFoundFilter } from './common/filters/notFoundFilter-exceptions.filter';
+import { MyPcModule } from './my-pc/my-pc.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { NotFoundFilter } from './common/filters/notFoundFilter-exceptions.filte
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MONGODB),
     AuthModule,
+    MyPcModule,
     
 
   ],

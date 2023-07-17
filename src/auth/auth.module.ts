@@ -22,6 +22,8 @@ import { LoginGuard } from './guards/login.guard';
     ]),
     PassportModule,
   ],
- 
+ exports:[
+  
+ ]
 })
 export class AuthModule {}
