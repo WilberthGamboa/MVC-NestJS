@@ -11,12 +11,18 @@
     <form enctype="application/json" action="/auth/register" method="POST" >
       
         <input type="text" name="email" placeholder="email">
+        {{#each messages}}
+        {{#if email}}
+          <label for="email">{{email}}</label>
+        {{/if}}
+        {{/each}}
         <input type="text" name="password" placeholder="password">
-   
-        
+        {{#each messages}}
+          <label for="password">{{password}}</label>
+        {{/each}}
     <input type="submit">
 
     </form>
-        {{messages}}
+
   </body>
 </html>
