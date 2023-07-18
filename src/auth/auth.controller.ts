@@ -1,50 +1,53 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Render, Res, UsePipes, ValidationPipe, Session, Req, UseGuards, UseFilters } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Render, UseFilters, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { userValidation } from './entities/validate/user.validate';
-import { Request, Response } from 'express';
-import { AuthenticatedGuard } from 'src/common/guards/authenticated.guard';
-import { AuthExceptionFilter } from 'src/common/filters/auth-exceptions.filter';
-import { LoginGuard } from 'src/common/guards/login.guard';
+
+import { AuthExceptionFilter } from './filters/auth-exceptions.filter';
+import {  Response } from 'express';
+import { CreateUserDto } from './dto/create-user.dto';
+import { LoginGuard } from './guards/login.guard';
+import { AuthenticatedGuard } from './guards/authenticated.guard';
 
 @Controller('auth')
 @UseFilters(AuthExceptionFilter)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-    @Get('register')
-    @Render('auth/register')
-    viewRegister(){
-      
-      
+
+  // Controladores encargados del registro 
+  @Get('register')
+  @Render('auth/register')
+  renderRegister(@Req() req) {
+    return{
+      messages:req.flash('messages')
     }
- 
-    @Post('register')
-    create(@Body() body:Request, @Res() response:Response) {
-      this.authService.create(body,response)
-   }
+  }
 
+  @Post('register')
+  async createUser(@Body() createAuthDto:CreateUserDto, @Res() response:Response) {
+     await this.authService.createUser(createAuthDto);
+     response.redirect('/auth/login')
+  }
 
-    @Get('login')
-    @Render('auth/login')
-    viewLogin(@Body() body:Request, @Res() response:Response, @Session() session: Record<string, any>){
-     
-     
-      
+  // Controladores encargados del login 
+
+  @Get('login')
+  @Render('auth/login')
+  renderLogin(@Req() req){
+    return{
+      messages:req.flash('messages')
     }
-    @UseGuards(LoginGuard)
-    @Post('login')
-    createLogin(@Req() req:Request,@Session() session: Record<string, any>,@Res() response:Response) {
-      console.log('no ha pasado')
-    response.redirect('/myPcs')
-   
+  }
 
-  
-      
-   }
-
-    
-
-
-  
-    
+  @UseGuards(LoginGuard)
+  @Post('login')
+  postLogin(@Res()response:Response){
+    response.redirect('/myPc')
+  }
+  /*
+  @UseGuards(AuthenticatedGuard)
+  @Get('pc') 
+  @Render('userPc/myPcs')
+  renderPc(){
+    console.log('estoy en pc')
+  }
+*/
 }
-

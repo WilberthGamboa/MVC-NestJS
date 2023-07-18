@@ -3,16 +3,26 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { UserPcModule } from './user-pc/user-pc.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { APP_FILTER } from '@nestjs/core';
+import { NotFoundFilter } from './common/filters/notFoundFilter-exceptions.filter';
+import { MyPcModule } from './my-pc/my-pc.module';
 
 @Module({
   imports: [
+    
     ConfigModule.forRoot(),
+    MongooseModule.forRoot(process.env.MONGODB),
     AuthModule,
-    UserPcModule
+    MyPcModule,
+    
 
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    {
+      provide: APP_FILTER,
+      useClass: NotFoundFilter,
+    },],
 })
 export class AppModule {}

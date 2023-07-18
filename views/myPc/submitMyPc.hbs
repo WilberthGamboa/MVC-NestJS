@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>App</title>
+  </head>
+  <body>
+    <h1>SubirMyPc</h1>
+   
+    {{> pcPartial}}
+
+    <form enctype="multipart/form-data" action="" method="post">
+
+      <input type="text" name="nombre" placeholder="nombre">
+      <input type="text" name="descripcion" placeholder="descripcion">
+      <input type="file" name="file">
+      <input type="submit" value="subir al servidor">
+    </form>
+    
+ 
+  </body>
+</html>

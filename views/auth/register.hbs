@@ -8,13 +8,15 @@
     <h1>REGISTER</h1>
     {{> main}}
 
-    <form action="register" method="post">
-        <input type="text" name="name">
-        <input type="text" name="password">
-        <input type="text" name="lastName">
-        <input type="text" name="email">
-  {{errors}}
+    <form enctype="application/json" action="/auth/register" method="POST" >
+      
+        <input type="text" name="email" placeholder="email">
+        <input type="text" name="password" placeholder="password">
+   
+        
     <input type="submit">
+
     </form>
+        {{messages}}
   </body>
 </html>

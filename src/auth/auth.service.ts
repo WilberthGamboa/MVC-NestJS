@@ -1,58 +1,77 @@
-import { Injectable } from '@nestjs/common';
-import { userValidation } from './entities/validate/user.validate';
-import { Request, Response } from 'express';
+import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { CreateUserDto } from './dto/create-user.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { User } from './entities/user.entity';
+import { Model } from 'mongoose';
+
 
 
 @Injectable()
 export class AuthService {
-    users: { userId: number; username: string; password: string; pet: { name: string; picId: number; }; }[];
+users: { userId: number; username: string; password: string; pet: { name: string; picId: number; }; }[];
+  
+constructor(
 
-    constructor(){
-      this.users = [
-        {
-          userId: 1,
-          username: 'w',
-          password: 'w',
-          pet: { name: 'alfred', picId: 1 },
-        },
-        {
-          userId: 2,
-          username: 'chris',
-          password: 'secret',
-          pet: { name: 'gopher', picId: 2 },
-        },
-        {
-          userId: 3,
-          username: 'maria',
-          password: 'guess',
-          pet: { name: 'jenny', picId: 3 },
-        },
-      ];
-    }
-       // TODO: validar que los datos correctamente
-    create(body:Request,response:Response) {
-        const errors = userValidation(body);
-    
-        if (errors.length!=0) {
-          return response.render('auth/register', { errors }); // Utiliza render en lugar de redirect
-        }
-      
-        return response.redirect('/auth/login');
+  @InjectModel(User.name)
+  private readonly userModel: Model<User>
 
-    }
-
-     async findOne(username: string): Promise<any> {
-      return this.users.find(user => user.username === username);
-    }
-    async validateUser(username, pass): Promise<any> {
-      const user = await this.findOne(username);
-      if (user && user.password === pass) {
-        const { password, ...result } = user;
-        return result;
-      }
-      return null;
-    }
-
-    
-
+){
+  this.users = [
+    {
+      userId: 1,
+      username: 'w',
+      password: 'w',
+      pet: { name: 'alfred', picId: 1 },
+    },
+    {
+      userId: 2,
+      username: 'chris',
+      password: 'secret',
+      pet: { name: 'gopher', picId: 2 },
+    },
+    {
+      userId: 3,
+      username: 'maria',
+      password: 'guess',
+      pet: { name: 'jenny', picId: 3 },
+    },
+  ];
 }
+
+  async createUser(createAuthDto:CreateUserDto){
+    try {
+      await this.userModel.create(createAuthDto);
+    } catch (error) {
+      console.log(error.code)
+      this.handleDbException(error)
+    }
+  }
+
+  async validateUser(email:string,password:string):Promise<any> {
+   
+      
+     
+      const user = await  this.userModel.findOne({email})
+      console.log(user)
+
+     
+
+      if (!user||user?.password!=password ) {
+        throw new UnauthorizedException('Usuario o contraseña no válidos')
+      }
+      return user;
+     
+   
+  }
+
+  private handleDbException(error:any){
+    if (error.code===11000) {
+      throw new BadRequestException('EL correo ya está registrado')
+    }else{
+      throw new InternalServerErrorException(`Cant create Pokemon - Check server logs`);
+    }
+  }
+  
+}
+  
+
