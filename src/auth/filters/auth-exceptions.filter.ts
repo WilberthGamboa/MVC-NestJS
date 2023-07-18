@@ -32,9 +32,28 @@ import {
       if (
         exception instanceof BadRequestException
       ) {
-        console.log(errorResponse)
-        request.flash('messages', errorResponse.message);
-        response.redirect('/auth/register')
+        const message = {
+          email:[],
+          password:[],
+        }
+        if (Array.isArray(errorResponse.message)) {
+          errorResponse.message.forEach(element => {
+            if(element.includes('contraseña')){
+              message.password.push(element)
+            }else{
+              message.email.push(element)
+            }
+          });
+        }else{
+          if(errorResponse.message.includes('contraseña')){
+            message.password.push(errorResponse.message)
+          }else{
+            message.email.push(errorResponse.message)
+          }
+        }
+        console.log(message)
+        request.flash('messages', message);
+        response.redirect('/auth/register');
       } 
       else if (
         exception instanceof UnauthorizedException
@@ -43,7 +62,7 @@ import {
             errorResponse.message=''
             const messages = [];
             if (request.body.username==='') {
-              messages.push('El username no puede estar vacio')
+              messages.push('El correo no puede estar vacio')
             }
             if (request.body.password==='') {
               messages.push('La contraseña no puede estar vacia')

@@ -16,7 +16,7 @@ export class MyPcController {
   @Get()
   @Render('myPc/main')
   getMyPcs(){
-
+    
   }
   //@UseGuards(AuthenticatedGuard)
   @Get('/submit')
