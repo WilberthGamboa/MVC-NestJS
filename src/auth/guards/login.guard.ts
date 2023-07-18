@@ -4,7 +4,6 @@ import { AuthGuard } from '@nestjs/passport';
 @Injectable()
 export class LoginGuard extends AuthGuard('local') {
   async canActivate(context: ExecutionContext) {
-    
     console.log("Dentro de login")
     const result = (await super.canActivate(context)) as boolean;
     console.log("despues de resutl")
