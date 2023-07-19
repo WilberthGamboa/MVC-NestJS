@@ -8,6 +8,7 @@ import { Response } from 'express';
 import { MyPcExceptionFilter } from './filters/my-pc.exceptionFilter';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { fileNamer } from './helper/fileNamer.helper';
 @UseFilters(MyPcExceptionFilter)
 @Controller('myPc')
 export class MyPcController {
@@ -31,16 +32,12 @@ export class MyPcController {
   @UseInterceptors(FileInterceptor('file',{
     storage:diskStorage({
       destination:'./uploads',
+      filename:fileNamer
     })
   }),)
   submitMyPc(@UploadedFile(
-    new ParseFilePipe({
-      validators: [
-        //new MaxFileSizeValidator({ maxSize: 1000 }),
-        //new FileTypeValidator({ fileType: 'image/jpeg' }),
-      ],
-    }),
-  ) file: Express.Multer.File, @Body() formData: any,@Res() res:Response) {
+    
+  ) file: Express.Multer.File, @Body() formData: CreateMyPcDto,@Res() res:Response) {
     /*
     if (!file) {
       throw new BadRequestException('La imagen es obligatoria')

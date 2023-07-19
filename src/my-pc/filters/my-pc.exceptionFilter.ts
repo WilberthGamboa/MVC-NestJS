@@ -32,6 +32,8 @@ import {
         exception instanceof BadRequestException
       ) {
         console.log(errorResponse)
+        console.log(request.body.file)
+        console.log(request.file)
         request.flash('messages', errorResponse.message);
         response.redirect('/myPc/submit')
       } 

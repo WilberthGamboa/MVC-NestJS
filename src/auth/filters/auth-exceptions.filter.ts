@@ -38,7 +38,9 @@ import { ErrorsFilter } from '../helper/errorsFilter.helper';
       if (
         exception instanceof BadRequestException
       ) {
+     
        const authFormErros = this.errorsFilter.register(errorResponse.message)
+       console.log(authFormErros)
        request.flash('messages', authFormErros);
        response.redirect('/auth/register');
       } 
@@ -46,8 +48,9 @@ import { ErrorsFilter } from '../helper/errorsFilter.helper';
       else if (
         exception instanceof UnauthorizedException
       ) {
-        
+        console.log(errorResponse.message)
         const authFormErros = this.errorsFilter.login(errorResponse.message,request.body)
+        console.log(authFormErros)
         request.flash('messages', authFormErros);
         response.redirect('/auth/login')
         

@@ -42,12 +42,5 @@ export class AuthController {
   postLogin(@Res()response:Response){
     response.redirect('/myPc')
   }
-  /*
-  @UseGuards(AuthenticatedGuard)
-  @Get('pc') 
-  @Render('userPc/myPcs')
-  renderPc(){
-    console.log('estoy en pc')
-  }
-*/
+
 }
