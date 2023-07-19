@@ -5,10 +5,11 @@ import {
     ArgumentsHost,
     HttpException,
     UnauthorizedException,
-    ForbiddenException,
     BadRequestException,
   } from '@nestjs/common';
   import { Request, Response } from 'express';
+import { ErrorsFilter } from '../helper/errorsFilter.helper';
+
   
   interface IRequestFlash extends Request {
     flash: any;
@@ -16,60 +17,38 @@ import {
   
   @Catch(HttpException)
   export class AuthExceptionFilter implements ExceptionFilter {
+    constructor(
+      private readonly errorsFilter:ErrorsFilter
+    ){
+
+    }
+
     catch(exception: HttpException, host: ArgumentsHost) {
       const ctx = host.switchToHttp();
       const response = ctx.getResponse<Response>();
       const request = ctx.getRequest<IRequestFlash>();
-     
-      
+      //obtenemos información de la exception
       const errorResponse = exception.getResponse() as {
         statusCode: number;
         message: string | string[];
         error: string;
       };
-    
-    
+      
+      // Validación correspondiente al register
       if (
         exception instanceof BadRequestException
       ) {
-        const message = {
-          email:[],
-          password:[],
-        }
-        if (Array.isArray(errorResponse.message)) {
-          errorResponse.message.forEach(element => {
-            if(element.includes('contraseña')){
-              message.password.push(element)
-            }else{
-              message.email.push(element)
-            }
-          });
-        }else{
-          if(errorResponse.message.includes('contraseña')){
-            message.password.push(errorResponse.message)
-          }else{
-            message.email.push(errorResponse.message)
-          }
-        }
-        console.log(message)
-        request.flash('messages', message);
-        response.redirect('/auth/register');
+       const authFormErros = this.errorsFilter.register(errorResponse.message)
+       request.flash('messages', authFormErros);
+       response.redirect('/auth/register');
       } 
+      //Validación correspondiente al login
       else if (
         exception instanceof UnauthorizedException
       ) {
-        if (errorResponse.message==='Unauthorized'){
-            errorResponse.message=''
-            const messages = [];
-            if (request.body.username==='') {
-              messages.push('El correo no puede estar vacio')
-            }
-            if (request.body.password==='') {
-              messages.push('La contraseña no puede estar vacia')
-            }
-            errorResponse.message=messages
-        }
-        request.flash('messages', errorResponse.message);
+        
+        const authFormErros = this.errorsFilter.login(errorResponse.message,request.body)
+        request.flash('messages', authFormErros);
         response.redirect('/auth/login')
         
       } 
