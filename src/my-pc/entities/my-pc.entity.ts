@@ -1,4 +1,4 @@
-import { Prop, Schema } from "@nestjs/mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Types } from "mongoose";
 
 @Schema()
@@ -19,3 +19,5 @@ export class MyPc extends Document {
     user: Types.ObjectId;
 
 }
+
+export const MyPcSchema = SchemaFactory.createForClass(MyPc);

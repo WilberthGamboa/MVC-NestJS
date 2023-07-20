@@ -24,7 +24,7 @@ import { ErrorsFilter } from './helper/errorsFilter.helper';
     PassportModule,
   ],
  exports:[
-  
+  MongooseModule
  ]
 })
 export class AuthModule {}

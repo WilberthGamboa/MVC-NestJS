@@ -8,10 +8,6 @@ export const fileNamer = (req:Express.Request,file :Express.Multer.File, callbac
     console.log(file)
     const fileExtension = file.mimetype.split('/')[1];
     const fileName = `${file.originalname}.${fileExtension}`
-   
-   
-    
-
      callback(null,fileName);
     
 }
