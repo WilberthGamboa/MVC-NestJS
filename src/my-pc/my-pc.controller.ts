@@ -13,11 +13,12 @@ import { fileNamer } from './helper/fileNamer.helper';
 @Controller('myPc')
 export class MyPcController {
   constructor(private readonly myPcService: MyPcService) {}
-  //@UseGuards(AuthenticatedGuard)
+  @UseGuards(AuthenticatedGuard)
   @Get()
   @Render('myPc/main')
-  async getMyPcs(){
-    const pc =  await this.myPcService.getAll();
+  async getMyPcs(@Req() req:Request){
+    
+    const pc =  await this.myPcService.getAll(req.user);
      const pcConFotos = pc.map(x=>{
       console.log(x)
       const {image ,...restoPc} = x;
@@ -58,18 +59,6 @@ export class MyPcController {
   ) file: Express.Multer.File, @Body() createMyPcDto: CreateMyPcDto,@Res() res:Response,@Req() req:Request) {
 
     await this.myPcService.submitMyPc(createMyPcDto,req.user,file.filename,file.destination)
-    /*
-    if (!file) {
-      throw new BadRequestException('La imagen es obligatoria')
-    }
-    */
-   /*
-   console.log(req.user)
-   console.log("destino:  "+ file.destination)
-   console.log("nombre:  "+ file.filename)
-    console.log('Archivo:', file); // Datos del archivo
-    console.log('Información adicional:', createMyPcDto); // Datos adicionales del formulario
-    */
     res.redirect('/myPc/submit')
   }
 

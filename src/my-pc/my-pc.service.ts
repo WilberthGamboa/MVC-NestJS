@@ -27,7 +27,7 @@ export class MyPcService {
             let userEntity;
             const path = fileName ;
         try { 
-            const id = new Types.ObjectId(user.id);
+            const id = new Types.ObjectId(user._id);
             userEntity ={
                 ...createMyPcDto,
                 user:id,
@@ -44,9 +44,10 @@ export class MyPcService {
         return;
     }
 
-    async getAll(){
-        const x = await this.myPcModel.find({}).lean()
-        //console.log(x)
+    async getAll(user){
+        console.log(user._id)
+        const x = await this.myPcModel.find({user:new Types.ObjectId(user._id)}).lean()
+        console.log(x)
         return x
     }
 
