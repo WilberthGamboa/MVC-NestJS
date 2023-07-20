@@ -13,16 +13,34 @@ import { fileNamer } from './helper/fileNamer.helper';
 @Controller('myPc')
 export class MyPcController {
   constructor(private readonly myPcService: MyPcService) {}
-  @UseGuards(AuthenticatedGuard)
+  //@UseGuards(AuthenticatedGuard)
   @Get()
   @Render('myPc/main')
-  getMyPcs(){
+  async getMyPcs(){
+    const pc =  await this.myPcService.getAll();
+     const pcConFotos = pc.map(x=>{
+      console.log(x)
+      const {image ,...restoPc} = x;
+      const nuevaImagen = "http://localhost:3000/myPc/see/"+image;
+      console.log(nuevaImagen)
+      return {
+        ...restoPc,
+        nuevaImagen
+      }
+
+     })
+     console.log(pcConFotos)
+    return{
+      data: pcConFotos
+    }
     
   }
-  //@UseGuards(AuthenticatedGuard)
+  @UseGuards(AuthenticatedGuard)
   @Get('/submit')
   @Render('myPc/submitMyPc')
-  renderSubmitMyPc(){
+  async renderSubmitMyPc(){
+     
+     
 
   }
   
@@ -35,22 +53,36 @@ export class MyPcController {
       filename:fileNamer
     })
   }),)
-  submitMyPc(@UploadedFile(
+  async submitMyPc(@UploadedFile(
     
   ) file: Express.Multer.File, @Body() createMyPcDto: CreateMyPcDto,@Res() res:Response,@Req() req:Request) {
 
-    //this.submitMyPc()
+    await this.myPcService.submitMyPc(createMyPcDto,req.user,file.filename,file.destination)
     /*
     if (!file) {
       throw new BadRequestException('La imagen es obligatoria')
     }
     */
+   /*
    console.log(req.user)
    console.log("destino:  "+ file.destination)
    console.log("nombre:  "+ file.filename)
     console.log('Archivo:', file); // Datos del archivo
     console.log('Información adicional:', createMyPcDto); // Datos adicionales del formulario
+    */
     res.redirect('/myPc/submit')
   }
+
+  @Get('see/:imageName')
+  findProductImage(
+    @Res() res: Response,
+    @Param('imageName') imageName: string
+  ) {
+
+    const path = this.myPcService.getStaticProductImage( imageName );
+
+    res.sendFile( path );
+  }
+  
  
 }

@@ -43,4 +43,11 @@ export class AuthController {
     response.redirect('/myPc')
   }
 
+  @UseGuards(LoginGuard)
+  @Get('logout')
+  logout(@Res()response:Response,@Req() req){
+    req.logout()
+   
+  }
+
 }

@@ -6,7 +6,12 @@
   </head>
   <body>
     <h1>Mis computadoras</h1>
-   
+    {{#each data}}
+          {{#if nuevaImagen}}
+         <img src={{nuevaImagen}} alt="" width="400px" height="400px">
+          {{/if}}
+          {{/each}}
+
     {{> pcPartial}}
     
  

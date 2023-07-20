@@ -6,9 +6,9 @@ export class CreateMyPcDto {
     nombre: string;
 
     @IsString()
-   @IsNotEmpty()
+    @IsNotEmpty()
     descripcion:string;
 
-
+    
 
 }

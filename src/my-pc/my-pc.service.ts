@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateMyPcDto } from './dto/create-my-pc.dto';
 import { UpdateMyPcDto } from './dto/update-my-pc.dto';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { User } from 'src/auth/entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { MyPc } from './entities/my-pc.entity';
+
+import { existsSync } from 'fs';
+import { join } from 'path';
 
 @Injectable()
 export class MyPcService {
@@ -19,8 +22,51 @@ export class MyPcService {
 
     }
 
-    submitMyPc(createMyPcDto: CreateMyPcDto){
-        
+    async submitMyPc(createMyPcDto: CreateMyPcDto,user,fileName,fileDestination){
+
+            let userEntity;
+            const path = fileName ;
+        try { 
+            const id = new Types.ObjectId(user.id);
+            userEntity ={
+                ...createMyPcDto,
+                user:id,
+                image:path
+
+            } 
+           await  this.myPcModel.create(userEntity)
+
+           
+        } catch (error) {
+            console.log (error)
+            this.handleDbException(error)
+        }
+        return;
     }
+
+    async getAll(){
+        const x = await this.myPcModel.find({}).lean()
+        //console.log(x)
+        return x
+    }
+
+
+    private handleDbException(error:any){
+        if (error.code===11000) {
+          throw new BadRequestException('Ya existe ')
+        }else{
+          throw new InternalServerErrorException(`Cant create  - Check server logs`);
+        }
+      }
+     
+    getStaticProductImage(imageName:string){
+        const path = join(__dirname,'../../uploads/', imageName);
+        if (!existsSync(path)) {
+            throw new BadRequestException('No se encontró la imagen: '+ imageName);
+            
+        }
+
+    return path;
+    } 
 
 }

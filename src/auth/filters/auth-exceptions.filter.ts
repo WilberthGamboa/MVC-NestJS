@@ -51,8 +51,14 @@ import { ErrorsFilter } from '../helper/errorsFilter.helper';
         console.log(errorResponse.message)
         const authFormErros = this.errorsFilter.login(errorResponse.message,request.body)
         console.log(authFormErros)
-        request.flash('messages', authFormErros);
-        response.redirect('/auth/login')
+        if (authFormErros.email.length===0&&authFormErros.password.length===0&&authFormErros.everyone.length===0) {
+          response.redirect('/')
+          
+        }else{
+          request.flash('messages', authFormErros);
+          response.redirect('/auth/login')
+        }
+       
         
       } 
      

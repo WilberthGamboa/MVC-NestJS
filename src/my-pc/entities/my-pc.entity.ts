@@ -4,7 +4,7 @@ import { Document, Types } from "mongoose";
 @Schema()
 export class MyPc extends Document {
     @Prop({
-        unique:true,
+    
         index:true
     })
     nombre: string;
