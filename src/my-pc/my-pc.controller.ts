@@ -9,6 +9,7 @@ import { MyPcExceptionFilter } from './filters/my-pc.exceptionFilter';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { fileNamer } from './helper/fileNamer.helper';
+import { fileFilter } from './helper/fileFilter.helper';
 @UseFilters(MyPcExceptionFilter)
 @Controller('myPc')
 export class MyPcController {
@@ -40,8 +41,11 @@ export class MyPcController {
   @UseGuards(AuthenticatedGuard)
   @Get('/submit')
   @Render('myPc/submitMyPc')
-  async renderSubmitMyPc(){
+  async renderSubmitMyPc(@Req() req){
      
+    return {
+      data : req.flash('messages')
+    }
      
 
   }
@@ -50,6 +54,7 @@ export class MyPcController {
   @UseGuards(AuthenticatedGuard)
   @Post('/submit')
   @UseInterceptors(FileInterceptor('file',{
+    fileFilter:fileFilter,
     storage:diskStorage({
       destination:'./uploads',
       filename:fileNamer
@@ -58,6 +63,11 @@ export class MyPcController {
   async submitMyPc(@UploadedFile(
     
   ) file: Express.Multer.File, @Body() createMyPcDto: CreateMyPcDto,@Res() res:Response,@Req() req:Request) {
+
+    if (!file) {
+      throw new BadRequestException('El formato de la imagen es incorrecta, verifica que sea: jpg jpeg png gif ')
+      
+    }
 
     await this.myPcService.submitMyPc(createMyPcDto,req.user,file.filename,file.destination)
     res.redirect('/myPc/submit')

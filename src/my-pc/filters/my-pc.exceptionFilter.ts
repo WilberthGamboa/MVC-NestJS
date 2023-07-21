@@ -8,6 +8,7 @@ import {
     BadRequestException,
   } from '@nestjs/common';
   import { Request, Response } from 'express';
+import { MyPcFormErros } from '../interfaces/my-pc-formErros.interface';
   
   interface IRequestFlash extends Request {
     flash: any;
@@ -31,10 +32,20 @@ import {
       if (
         exception instanceof BadRequestException
       ) {
-        console.log(errorResponse)
-        console.log(request.body.file)
-        console.log(request.file)
-        request.flash('messages', errorResponse.message);
+        const myPcFormErros: MyPcFormErros = {
+          nombre:[],
+          descripcion:[],
+          file:[],
+          everyone:[]
+        }
+        if (!Array.isArray(errorResponse.message)) {
+          if (errorResponse.message.includes('imagen')) {
+            myPcFormErros.file.push(errorResponse.message)
+          }
+          
+        }
+        
+        request.flash('messages', myPcFormErros);
         response.redirect('/myPc/submit')
       } 
       else if (

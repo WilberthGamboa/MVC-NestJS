@@ -10,10 +10,13 @@
     {{> pcPartial}}
 
     <form enctype="multipart/form-data" action="" method="post">
-
+ 
       <input type="text" name="nombre" placeholder="nombre">
       <input type="text" name="descripcion" placeholder="descripcion">
       <input type="file" name="file">
+      {{#each data}}
+    <p> {{file}}</p>
+      {{/each}}
       <input type="submit" value="subir al servidor">
     </form>
     
