@@ -43,11 +43,16 @@ export class AuthController {
     response.redirect('/myPc')
   }
 
-  @UseGuards(LoginGuard)
+
   @Get('logout')
   logout(@Res()response:Response,@Req() req){
-    req.logout()
-   
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Error destroying session:', err);
+      }
+    });
+
+    response.redirect('/')
   }
 
 }

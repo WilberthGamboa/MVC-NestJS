@@ -13,6 +13,7 @@ import { fileNamer } from './helper/fileNamer.helper';
 @Controller('myPc')
 export class MyPcController {
   constructor(private readonly myPcService: MyPcService) {}
+
   @UseGuards(AuthenticatedGuard)
   @Get()
   @Render('myPc/main')
@@ -62,6 +63,9 @@ export class MyPcController {
     res.redirect('/myPc/submit')
   }
 
+
+  
+  @UseGuards(AuthenticatedGuard)
   @Get('see/:imageName')
   findProductImage(
     @Res() res: Response,
