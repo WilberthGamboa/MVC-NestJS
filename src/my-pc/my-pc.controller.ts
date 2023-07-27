@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Render, UseGuards, UseInterceptors, UploadedFile, Res, UseFilters, BadRequestException, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Render, UseGuards, UseInterceptors, UploadedFile, Res, UseFilters, BadRequestException, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator, Req, Session, Query } from '@nestjs/common';
 import { MyPcService } from './my-pc.service';
 import { CreateMyPcDto } from './dto/create-my-pc.dto';
 import { UpdateMyPcDto } from './dto/update-my-pc.dto';
@@ -18,23 +18,63 @@ export class MyPcController {
   @UseGuards(AuthenticatedGuard)
   @Get()
   @Render('myPc/main')
-  async getMyPcs(@Req() req:Request){
+  async getMyPcs(@Req() req:Request, @Session() session: Record<string, any>,@Query() query ){
     
-    const pc =  await this.myPcService.getAll(req.user);
+        const offset = Number(query.offset)
+        if (!isNaN(offset)) {
+          session.currentPage=offset
+        }
+    
+
+
+    if (!session.currentPage|| session.currentPage<=1 || offset===0) {
+     
+        session.currentPage=1;
+        session.nextPage=2;
+        session.previousPage=1;
+    }else{
+      session.currentPage=offset;
+      
+      session.nextPage=offset+1;
+      session.previousPage=offset-1;
+    }
+   
+
+    let pc =  await this.myPcService.getAll(req.user,session.currentPage);
+    if(pc.length===0){
+
+      session.currentPage= session.currentPage-1
+      session.nextPage=session.nextPage-1;
+      if (session.currentPage===1) {
+        session.previousPage=1;
+    
+      }else{
+        session.previousPage=session.previousPage-1;
+      }
+
+      pc =  await this.myPcService.getAll(req.user,session.currentPage);
+    }
      const pcConFotos = pc.map(x=>{
-      console.log(x)
+     // console.log(x)
       const {image ,...restoPc} = x;
       const nuevaImagen = "http://localhost:3000/myPc/see/"+image;
-      console.log(nuevaImagen)
+     // console.log(nuevaImagen)
       return {
         ...restoPc,
         nuevaImagen
       }
 
      })
-     console.log(pcConFotos)
+    // console.log(pcConFotos)
     return{
-      data: pcConFotos
+      data: pcConFotos,
+      pagination:{
+        currentPage: session.currentPage,
+        nextPage:  session.nextPage,
+        previousPage: session.previousPage  
+      }
+      
+      
     }
     
   }
@@ -49,7 +89,6 @@ export class MyPcController {
      
 
   }
-  
   
   @UseGuards(AuthenticatedGuard)
   @Post('/submit')

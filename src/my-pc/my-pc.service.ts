@@ -44,9 +44,9 @@ export class MyPcService {
         return;
     }
 
-    async getAll(user){
-        console.log(user._id)
-        const x = await this.myPcModel.find({user:new Types.ObjectId(user._id)}).lean()
+    async getAll(user,offset){
+        
+        const x = await this.myPcModel.find({user:new Types.ObjectId(user._id)}).lean().limit(1).skip(offset)
         console.log(x)
         return x
     }
