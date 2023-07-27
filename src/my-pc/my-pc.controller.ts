@@ -19,6 +19,10 @@ export class MyPcController {
   @Get()
   @Render('myPc/main')
   async getMyPcs(@Req() req:Request, @Session() session: Record<string, any>,@Query() query ){
+
+    return  await this.myPcService.getAll(req.user,session,query.offset);
+
+    /*
     
         const offset = Number(query.offset)
         if (!isNaN(offset)) {
@@ -66,16 +70,8 @@ export class MyPcController {
 
      })
     // console.log(pcConFotos)
-    return{
-      data: pcConFotos,
-      pagination:{
-        currentPage: session.currentPage,
-        nextPage:  session.nextPage,
-        previousPage: session.previousPage  
-      }
-      
-      
-    }
+    */
+   
     
   }
   @UseGuards(AuthenticatedGuard)
