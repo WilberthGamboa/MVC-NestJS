@@ -9,6 +9,4 @@ export class CreateMyPcDto {
     @IsNotEmpty()
     descripcion:string;
 
-    
-
 }
