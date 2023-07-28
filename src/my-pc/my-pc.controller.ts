@@ -16,11 +16,11 @@ export class MyPcController {
   constructor(private readonly myPcService: MyPcService) {}
 
   @UseGuards(AuthenticatedGuard)
-  @Get()
+  @Get(':id?')
   @Render('myPc/main')
-  async getMyPcs(@Req() req:Request, @Session() session: Record<string, any>,@Query() query ){
-
-    return  await this.myPcService.getAll(req.user,session,query.offset);
+  async getMyPcs(@Req() req:Request, @Session() session: Record<string, any>,@Param() query ){
+    
+    return  await this.myPcService.getAll(req.user,session,query.id);
 
     /*
     

@@ -16,7 +16,7 @@
     
   <div>
       {{#if isEnabled.isEnabledBtnPreviousPage}}
-    <a href="http://localhost:3000/myPc?offset={{pagination.previousPage}}"> 
+    <a href="http://localhost:3000/myPc/{{pagination.previousPage}}"> 
 
       <input type="button" value="{{pagination.previousPage}}">
 
@@ -27,7 +27,7 @@
       {{pagination.currentPage}}
     </p>
       {{#if isEnabled.isEnabledBtnNextPage}}
-    <a href="http://localhost:3000/myPc?offset={{pagination.nextPage}}"> 
+    <a href="http://localhost:3000/myPc/{{pagination.nextPage}}"> 
 
       <input type="button" value="{{pagination.nextPage}}">
 
