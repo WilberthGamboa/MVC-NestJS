@@ -11,6 +11,7 @@ import { Response } from 'express';
 @Catch(HttpException)
 export class NotFoundFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
+    console.log(exception.getStatus());
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 

@@ -8,15 +8,14 @@ import { AuthModule } from 'src/auth/auth.module';
 @Module({
   controllers: [MyPcController],
   providers: [MyPcService],
-  imports:[
+  imports: [
     MongooseModule.forFeature([
       {
-        name:MyPc.name,
-        schema:MyPcSchema
-      }
-     
+        name: MyPc.name,
+        schema: MyPcSchema,
+      },
     ]),
-    AuthModule
-  ]
+    AuthModule,
+  ],
 })
 export class MyPcModule {}

@@ -3,17 +3,37 @@
   <head>
     <meta charset="utf-8" />
     <title>App</title>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
   </head>
   <body>
     <h1>LOGIN</h1>
     {{> main}}
  <form action="/auth/login" method="post">
+    
+       
         <input type="text" name="username">
+
+         {{#each messages}}
+          {{#if email}}
+          <label for="email" class="col-form-label alert alert-danger">{{email}}</label>
+          {{/if}}
+          {{/each}}
         <input type="text" name="password">
- 
+
+
+  {{#each messages}}
+          {{#if password}}
+          <label for="email" class="col-form-label alert alert-danger">{{password}}</label>
+          {{/if}}
+          {{/each}}
     <input type="submit">
      
     </form>
-    {{messages}}
+ {{#each messages}}
+          {{#if everyone}}
+          <label for="email" class="col-form-label alert alert-danger">{{everyone}}</label>
+          {{/if}}
+          {{/each}}
   </body>
 </html>

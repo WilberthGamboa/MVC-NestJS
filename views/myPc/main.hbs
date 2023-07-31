@@ -6,13 +6,14 @@
   </head>
   <body>
     <h1>Mis computadoras</h1>
+        {{> pcPartial}}
     {{#each pcsWithUrlImage}}
           {{#if urlImage}}
          <img src={{urlImage}} alt="" width="400px" height="400px">
           {{/if}}
-          {{/each}}
+    {{/each}}
 
-    {{> pcPartial}}
+
     
   <div>
       {{#if isEnabled.isEnabledBtnPreviousPage}}

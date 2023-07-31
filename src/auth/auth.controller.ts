@@ -15,6 +15,7 @@ import { Response } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginGuard } from './guards/login.guard';
 import { IRequestFlash } from 'src/common/interfaces/IRequeestFlash.interface';
+import { AuthFormErros } from './interfaces/AuthFormErros.interfaces';
 
 @Controller('auth')
 @UseFilters(AuthExceptionFilter)
@@ -25,8 +26,9 @@ export class AuthController {
   @Get('register')
   @Render('auth/register')
   renderRegister(@Req() req: IRequestFlash) {
+    const messages: AuthFormErros = req.flash('messages');
     return {
-      messages: req.flash('messages'),
+      messages,
     };
   }
   // * Envía información del registro
@@ -44,8 +46,9 @@ export class AuthController {
   @Get('login')
   @Render('auth/login')
   renderLogin(@Req() req: IRequestFlash) {
+    const messages: AuthFormErros = req.flash('messages');
     return {
-      messages: req.flash('messages'),
+      messages,
     };
   }
 
