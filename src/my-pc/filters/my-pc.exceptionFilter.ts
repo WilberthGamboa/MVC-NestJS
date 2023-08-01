@@ -21,7 +21,7 @@ export class MyPcExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<IRequestFlash>();
-    console.log(request.file)
+ 
     const errorResponse = exception.getResponse() as {
       statusCode: number;
       message: string | string[];
@@ -55,6 +55,12 @@ console.log(errorResponse.message)
       if (!Array.isArray(errorResponse.message)) {
         if (errorResponse.message.includes('imagen')) {
           myPcFormErros.file.push(errorResponse.message);
+        }
+        else if(errorResponse.message.includes('type')){
+          myPcFormErros.file.push('La imagen debe ser un jpeg, jpg o png');
+        }
+        else if(errorResponse.message.includes('size')){
+          myPcFormErros.file.push('El tamaño de la imagen es muy grande');
         }
       }
 

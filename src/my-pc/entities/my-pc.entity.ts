@@ -5,7 +5,7 @@ import { Document, Types } from "mongoose";
 export class MyPc extends Document {
     @Prop({
     
-        index:true
+       
     })
     nombre: string;
 
