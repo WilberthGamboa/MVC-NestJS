@@ -1,15 +1,13 @@
-import {join} from "path";
+import { join } from 'path';
 
-import * as fs from "fs/promises"
+import * as fs from 'node:fs/promises';
 
-export const generateImg = async (dataBuffer,imgName):Promise<void> =>{
+export const generateImg = async (dataBuffer, imgName): Promise<void> => {
+  const filePath = join(process.cwd(), '/src/upload', imgName);
 
-    const filePath = join(process.cwd(), '/src/upload', imgName);
-    console.log(filePath);
-    try {
-        fs.writeFile(filePath, dataBuffer);
-      } catch (error) {
-        console.log(error)
-      }
-  
-}
+  try {
+    fs.writeFile(filePath, dataBuffer);
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -1,11 +1,69 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>App</title>
-  </head>
-  <body>
-    <h1>404</h1>
-    <p>No se supone que deberías estar aquí... WASAAAAA</p>
-  </body>
+
+<head>
+  <meta charset="utf-8" />
+  <title>App</title>
+  <script src="/bootstrap/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+  <style>
+    body{
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  background: black !important;
+  color: white !important;
+  font-weight: 900 !important;
+}
+
+.height-vh{
+  height: 100vh;
+}
+
+.main-heading{
+  font-size: 220px;
+  font-weight: 700;
+}
+
+.fa{
+  font-size: 20px !important;
+  padding: 5px;
+}
+
+.btn{
+  color: white !important;
+  font-weight: 600 !important;
+  border: 1px solid white !important;
+  background: transparent !important;
+  border-radius: 0px !important;
+}
+
+.btn:hover{
+  color: black !important;
+  background: #fff !important;
+}
+  </style>
+</head>
+
+<body>
+   <div class="container-fluid">
+      <div class="row d-flex justify-content-center align-items-center height-vh">
+         <div class="col-lg-6 col-12">
+            <div class="col-md-12">
+               <img src="/assets/marcelo.png" width="65%">
+            </div>
+         </div>
+         <div class="col-lg-6 col-12">
+            <div class="col-12 d-flex flex-column justify-content-center align-items-center">
+               <h1 class="main-heading">404</h1>
+               <h2>Página no encontrada</h2>
+               <div class="text-center mt-4 mb-5">
+                  <a href="/" class="btn btn-success px-3 mr-2"><i class="fa fa-home"></i> Home</a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</body>
+
 </html>

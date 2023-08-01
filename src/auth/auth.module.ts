@@ -6,25 +6,20 @@ import { User, UserSchema } from './entities/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategy/local-strategy';
 import { SessionSerializer } from './serializer/session.serializer';
-import { LoginGuard } from './guards/login.guard';
 import { ErrorsFilter } from './helper/errorsFilter.helper';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService,LocalStrategy,SessionSerializer,ErrorsFilter],
-  imports:[
-   
+  providers: [AuthService, LocalStrategy, SessionSerializer, ErrorsFilter],
+  imports: [
     MongooseModule.forFeature([
       {
-        name:User.name,
-        schema:UserSchema
-      }
-     
+        name: User.name,
+        schema: UserSchema,
+      },
     ]),
     PassportModule,
   ],
- exports:[
-  MongooseModule
- ]
+  exports: [MongooseModule],
 })
 export class AuthModule {}

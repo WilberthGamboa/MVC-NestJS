@@ -6,14 +6,35 @@
   </head>
   <body>
     <h1>Mis computadoras</h1>
-    {{#each data}}
-          {{#if nuevaImagen}}
-         <img src={{nuevaImagen}} alt="" width="400px" height="400px">
+        {{> pcPartial}}
+    {{#each pcsWithUrlImage}}
+          {{#if urlImage}}
+         <img src={{urlImage}} alt="" width="400px" height="400px">
           {{/if}}
-          {{/each}}
+    {{/each}}
 
-    {{> pcPartial}}
+
     
- 
+  <div>
+      {{#if isEnabled.isEnabledBtnPreviousPage}}
+    <a href="http://localhost:3000/myPc/{{pagination.previousPage}}"> 
+
+      <input type="button" value="{{pagination.previousPage}}">
+
+    </a>
+
+    {{/if}}
+    <p>
+      {{pagination.currentPage}}
+    </p>
+      {{#if isEnabled.isEnabledBtnNextPage}}
+    <a href="http://localhost:3000/myPc/{{pagination.nextPage}}"> 
+
+      <input type="button" value="{{pagination.nextPage}}">
+
+    </a>
+
+   {{/if}}
+  </div>
   </body>
 </html>

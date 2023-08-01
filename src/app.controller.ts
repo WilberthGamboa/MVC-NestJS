@@ -1,7 +1,5 @@
-
 import { Get, Controller, Render, UseFilters } from '@nestjs/common';
 import { NotFoundFilter } from './common/filters/notFoundFilter-exceptions.filter';
-
 
 @Controller()
 @UseFilters(NotFoundFilter)
@@ -11,6 +9,4 @@ export class AppController {
   root() {
     return;
   }
-
-
 }
