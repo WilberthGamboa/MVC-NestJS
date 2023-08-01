@@ -14,10 +14,22 @@
     <form enctype="multipart/form-data" action="" method="post">
  
       <input type="text" name="nombre" placeholder="nombre">
+      {{#each message}}
+      {{#if nombre}}
+          <label for="email" class="col-form-label alert alert-danger">{{nombre}}</label>
+      {{/if}}
+      {{/each}}
       <input type="text" name="descripcion" placeholder="descripcion">
+      {{#each message}}
+      {{#if descripcion}}
+          <label for="email" class="col-form-label alert alert-danger">{{descripcion}}</label>
+      {{/if}}
+      {{/each}}
       <input type="file" name="file">
-      {{#each data}}
-    <p> {{file}}</p>
+      {{#each message}}
+      {{#if file}}
+          <label for="email" class="col-form-label alert alert-danger">{{file}}</label>
+      {{/if}}
       {{/each}}
       <input type="submit" value="subir al servidor">
     </form>

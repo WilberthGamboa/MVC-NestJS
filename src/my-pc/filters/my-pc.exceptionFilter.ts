@@ -17,17 +17,17 @@ interface IRequestFlash extends Request {
 @Catch(HttpException)
 export class MyPcExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
-    console.log(exception.cause);
+   // console.log(exception.cause);
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<IRequestFlash>();
-
+    console.log(request.file)
     const errorResponse = exception.getResponse() as {
       statusCode: number;
       message: string | string[];
       error: string;
     };
-
+console.log(errorResponse.message)
     if (exception instanceof BadRequestException) {
       const myPcFormErros: MyPcFormErros = {
         nombre: [],
@@ -38,8 +38,19 @@ export class MyPcExceptionFilter implements ExceptionFilter {
       if (request.file === undefined) {
         myPcFormErros.file.push('La imagen es obligatoria');
       }
-      console.log(errorResponse.message);
-      console.log(request.file);
+      if (Array.isArray(errorResponse.message)) {
+        errorResponse.message.forEach((message) => {
+          if (message.includes('nombre')) {
+            myPcFormErros.nombre.push(message)
+          }
+          else if(message.includes('descripcion')){
+            myPcFormErros.descripcion.push(message)
+          }
+          else{
+            myPcFormErros.everyone.push(message)
+          }
+        });
+      }
 
       if (!Array.isArray(errorResponse.message)) {
         if (errorResponse.message.includes('imagen')) {
@@ -68,5 +79,3 @@ export class MyPcExceptionFilter implements ExceptionFilter {
     }
   }
 }
-
-

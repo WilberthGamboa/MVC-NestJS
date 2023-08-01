@@ -4,6 +4,7 @@ import { MyPcController } from './my-pc.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MyPc, MyPcSchema } from './entities/my-pc.entity';
 import { AuthModule } from 'src/auth/auth.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   controllers: [MyPcController],
@@ -16,6 +17,7 @@ import { AuthModule } from 'src/auth/auth.module';
       },
     ]),
     AuthModule,
+   
   ],
 })
 export class MyPcModule {}

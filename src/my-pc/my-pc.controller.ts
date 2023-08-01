@@ -37,7 +37,7 @@ export class MyPcController {
   constructor(private readonly myPcService: MyPcService) {}
 
   //*Renderiza el formulario para subir computadoras */
-  @UseGuards(AuthenticatedGuard)
+ // @UseGuards(AuthenticatedGuard)
   @Get('submit')
   @Render('myPc/submitMyPc')
   renderSubmitMyPc(@Req() req) {
@@ -59,33 +59,45 @@ export class MyPcController {
   }
 
   //*Realiza la petición para subir la pc */
-  @UseGuards(AuthenticatedGuard)
+  //@UseGuards(AuthenticatedGuard)
   @Post('/submit')
   @UseInterceptors(
-    FileInterceptor('file', {
-      fileFilter: fileFilter,
-      storage: diskStorage({
-        destination: './uploads',
-        filename: fileNamer,
-      }),
-    }),
+    FileInterceptor('file')
   )
   async submitMyPc(
-    @UploadedFile() file: Express.Multer.File,
     @Body() createMyPcDto: CreateMyPcDto,
+    @UploadedFile(
+      /*
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 100000000 },),
+          new FileTypeValidator({ fileType: 'image/jpeg|png' }),
+        ],
+      }
+     
+      ),
+       */
+    ) file: Express.Multer.File,
     @Res() res: Response,
     @Req() req: Request,
   ) {
+    
+    console.log(createMyPcDto)
+    //console.log(file)
+   
+
+      /*
     if (!file) {
       throw new BadRequestException('Debes subir una imagen');
     }
-
+  
     await this.myPcService.submitMyPc(
       createMyPcDto,
       req.user,
       file.filename,
       file.destination,
     );
+    */
     res.redirect('/myPc/submit');
   }
 
