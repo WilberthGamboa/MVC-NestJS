@@ -25,8 +25,7 @@ export class MyPcService {
   async submitMyPc(
     createMyPcDto: CreateMyPcDto,
     user,
-    fileName,
-    fileDestination,
+    fileName
   ) {
     let userEntity;
     const path = fileName;

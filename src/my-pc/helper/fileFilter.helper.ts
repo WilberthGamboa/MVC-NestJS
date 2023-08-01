@@ -8,21 +8,9 @@ export const fileFilter = async (
   callback: Function,
 ) => {
   
-  const {nombre,descripcion} = req.body 
-  const test={
-    nombre,descripcion
-  } as CreateMyPcDto
  
 
-  const validationErrors = await validate({test});
-  console.log(validationErrors)
-  //console.log(validationErrors)
-  /*
-  if (validationErrors.length > 0) {
-    return callback(null, false);
-  }
-  */
-  // console.log({ file })
+
   if (!file) return callback(new Error('File is empty'), false);
 
   const fileExptension = file.mimetype.split('/')[1];
