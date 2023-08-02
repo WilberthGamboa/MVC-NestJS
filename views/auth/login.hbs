@@ -1,39 +1,54 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>App</title>
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
+<head>
+  <meta charset="utf-8" />
+  <title>App</title>
+  <script src="/bootstrap/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-  </head>
-  <body>
-    <h1>LOGIN</h1>
-    {{> main}}
- <form action="/auth/login" method="post">
-    
-       
-        <input type="text" name="username">
-
-         {{#each messages}}
-          {{#if email}}
-          <label for="email" class="col-form-label alert alert-danger">{{email}}</label>
-          {{/if}}
-          {{/each}}
-        <input type="text" name="password">
-
-
-  {{#each messages}}
-          {{#if password}}
-          <label for="email" class="col-form-label alert alert-danger">{{password}}</label>
-          {{/if}}
-          {{/each}}
-    <input type="submit">
-     
-    </form>
- {{#each messages}}
-          {{#if everyone}}
-          <label for="email" class="col-form-label alert alert-danger">{{everyone}}</label>
-          {{/if}}
-          {{/each}}
-  </body>
+</head>
+<body>
+  {{> main}}
+  <form enctype="application/json" action="/auth/login" method="POST">
+    <br>
+    <div class="row justify-content-md-center">
+      <div class="card text-center" style="width: 18rem;">
+        <div class="card-header card-title fw-bold">
+          Iniciar Sesión
+        </div>
+        <div class="card-body">
+          <div class="row d-flex justify-content-center">
+            <div class="col-auto">
+              <label for="email" class="col-form-label card-title">Email: </label>
+              <input type="email" class="form-control" name="username" id="email" placeholder="Correo Electrónico"
+                aria-labelledby="passwordHelpInline">
+              {{#each messages}}
+              {{#if email}}
+              <label for="email" class="col-form-label alert alert-danger">{{email}}</label>
+              {{/if}}
+              {{/each}}
+            </div>
+            <div class="col-auto">
+              <label for="password" class="col-form-label card-title">Password: </label>
+              <input type="text" class="form-control" name="password" id="password" placeholder="Contraseña"
+                aria-labelledby="passwordHelpInline">
+              {{#each messages}}
+              {{#if password}}
+              <label for="password" class="col-form-label alert alert-danger">{{password}}</label>
+              {{/if}}
+              {{/each}}
+            </div>
+            {{#each messages}}
+            {{#if everyone}}
+            <label class="col-form-label alert alert-danger">{{everyone}}</label>
+            {{/if}}
+            {{/each}}
+          </div>
+        </div>
+        <div class="card-footer text-body-secondary">
+          <input type="submit" class="btn btn-primary" value="Iniciar sesión">
+        </div>
+      </div>
+    </div>
+  </form>
+</body>
 </html>
