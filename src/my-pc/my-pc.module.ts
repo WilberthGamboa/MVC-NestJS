@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MyPc, MyPcSchema } from './entities/my-pc.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { NestjsFormDataModule } from 'nestjs-form-data';
 
 @Module({
   controllers: [MyPcController],
@@ -17,6 +18,7 @@ import { MulterModule } from '@nestjs/platform-express';
       },
     ]),
     AuthModule,
+    NestjsFormDataModule
    
   ],
 })

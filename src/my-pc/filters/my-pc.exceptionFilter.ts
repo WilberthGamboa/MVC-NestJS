@@ -35,9 +35,7 @@ console.log(errorResponse.message)
         file: [],
         everyone: [],
       };
-      if (request.file === undefined) {
-        myPcFormErros.file.push('La imagen es obligatoria');
-      }
+      
       if (Array.isArray(errorResponse.message)) {
         errorResponse.message.forEach((message) => {
           if (message.includes('nombre')) {
@@ -46,12 +44,16 @@ console.log(errorResponse.message)
           else if(message.includes('descripcion')){
             myPcFormErros.descripcion.push(message)
           }
+          else if(message.includes('imagen')){
+            myPcFormErros.file.push(message)
+
+          }
           else{
             myPcFormErros.everyone.push(message)
           }
         });
       }
-
+      /*
       if (!Array.isArray(errorResponse.message)) {
         if (errorResponse.message.includes('imagen')) {
           myPcFormErros.file.push(errorResponse.message);
@@ -63,7 +65,7 @@ console.log(errorResponse.message)
           myPcFormErros.file.push('El tamaño de la imagen es muy grande');
         }
       }
-
+*/
       request.flash('messages', myPcFormErros);
       response.redirect('/myPc/submit');
     } else if (exception instanceof UnauthorizedException) {
