@@ -9,8 +9,14 @@
         {{> pcPartial}}
     {{#each pcsWithUrlImage}}
           {{#if urlImage}}
+          <a href={{urlEditPc}}>
          <img src={{urlImage}} alt="" width="400px" height="400px">
+         </a>
           {{/if}}
+          {{#if urlEditPc}}
+             <p> {{urlEditPc}}</p>
+          {{/if}}
+          
     {{/each}}
 
 

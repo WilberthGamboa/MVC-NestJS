@@ -88,6 +88,14 @@ export class MyPcController {
     res.redirect('/myPc/submit');
   }
 
+  @Get('edit/:id')
+  @Render('myPc/editMyPc')
+  async updateMyPc(@Param('id') id: string){
+    
+   return  await this.myPcService.findMyPc(id);
+  }
+
+
   //*Permite renderizar las imágenes */
   @UseGuards(AuthenticatedGuard)
   @Get('see/:imageName')
@@ -99,4 +107,7 @@ export class MyPcController {
 
     res.sendFile(path);
   }
+
+
+
 }
