@@ -27,6 +27,7 @@ import { fileNamer } from './helper/fileNamer.helper';
 import * as fs from 'fs';
 import { join } from 'node:path';
 import { FormDataRequest } from 'nestjs-form-data';
+import { UpdateMyPcDto } from './dto/update-my-pc.dto';
 @Controller('myPc')
 @UseFilters(MyPcExceptionFilter)
 export class MyPcController {
@@ -87,12 +88,27 @@ export class MyPcController {
   
     res.redirect('/myPc/submit');
   }
+  @FormDataRequest()
+  @Post('edit')
+  async updateMyPc(@Req() req,@Res()res:Response, @Body() updateMyPcDto: UpdateMyPcDto){
+   // console.log(updateMyPcDto)
+  if (updateMyPcDto.file) {
+    console.log("hay que cambiar el archivo");
+    
+  }
+   await this.myPcService.updateMyPc(updateMyPcDto.id,req.user,updateMyPcDto);
+    res.redirect('/myPc/edit/'+updateMyPcDto.id);
+ 
 
+  }
   @Get('edit/:id')
   @Render('myPc/editMyPc')
-  async updateMyPc(@Param('id') id: string){
-    
-   return  await this.myPcService.findMyPc(id);
+  async updateRenderMyPc(@Param('id') id: string,@Req() req){
+    const pc =  await this.myPcService.findMyPc(id,req.user);
+   return {
+    pc,
+    id
+   }
   }
 
 

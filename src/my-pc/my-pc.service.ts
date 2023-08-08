@@ -148,9 +148,27 @@ export class MyPcService {
 
     return path;
   }
-  async findMyPc(id:string){
+  async findMyPc(id:string,user){
+    try {
     const pc =  await this.myPcModel.findById(id);
-    console.log(pc);
-    return pc
+    if (pc.user.toString()!=user._id) {
+      throw new BadRequestException('La computadora no le pertenece');
+      
+    }
+
+    return pc;
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+  async updateMyPc(id:string,user,updateMyPcDto:UpdateMyPcDto){
+    
+   const pc = await this.findMyPc(id,user);
+
+   if (pc) {
+    await this.myPcModel.findByIdAndUpdate(pc.id,updateMyPcDto);
+   }
+
   }
 }

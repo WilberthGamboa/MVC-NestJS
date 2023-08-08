@@ -14,11 +14,14 @@
         <div class="card mt-3">
           <div class="card-body">
             <h5 class="card-title">Formulario</h5>
-            <form enctype="multipart/form-data" action="" method="post">
-
+            <form enctype="multipart/form-data" action="/myPc/edit" method="post">
+              <div  >
+                 <input type="text" value={{id}} name="id" id="id" class="form-control" placeholder="Nombre">
+              </div>
               <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" value={{nombre}} name="nombre" id="nombre" class="form-control" placeholder="Nombre">
+                <input type="text" value={{pc.nombre}} name="nombre" id="nombre" class="form-control" placeholder="Nombre">
+                <p>{{pc.nombre}}</p>
                 {{#each message}}
                 {{#if nombre}}
                 <div class="alert alert-danger">{{nombre}}</div>
@@ -28,7 +31,7 @@
 
               <div class="mb-3">
                 <label for="descripcion" class="form-label">Descripción</label>
-                <input type="text"value={{descripcion}} name="descripcion" id="descripcion" class="form-control" placeholder="Descripción">
+                <input type="text"value={{pc.descripcion}} name="descripcion" id="descripcion" class="form-control" placeholder="Descripción">
                 {{#each message}}
                 {{#if descripcion}}
                 <div class="alert alert-danger">{{descripcion}}</div>
