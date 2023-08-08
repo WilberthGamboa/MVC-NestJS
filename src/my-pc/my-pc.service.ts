@@ -9,9 +9,10 @@ import { Model, Types } from 'mongoose';
 import { User } from 'src/auth/entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { MyPc } from './entities/my-pc.entity';
-
 import { existsSync } from 'fs';
 import { join } from 'path';
+import { fileNamer } from './helper/fileNamer.helper';
+import { saveImgDisk } from './helper/saveImgDisk.helper';
 
 @Injectable()
 export class MyPcService {
@@ -24,24 +25,26 @@ export class MyPcService {
 
   async submitMyPc(
     createMyPcDto: CreateMyPcDto,
-    user,
-    fileName
+    user:any
   ) {
-    let userEntity;
-    const path = fileName;
+    //TODO: Almacenar la imagen en disco
+    const fileNameUuid = fileNamer(createMyPcDto.file.extension);
+    saveImgDisk(createMyPcDto.file,fileNameUuid);
+
+    // Esta parte se encarga de almacenar la información del dto en la db
     try {
       const id = new Types.ObjectId(user._id);
-      userEntity = {
+     const userEntity = {
         ...createMyPcDto,
         user: id,
-        image: path,
+        image: fileNameUuid,
       };
       await this.myPcModel.create(userEntity);
     } catch (error) {
       console.log(error);
       this.handleDbException(error);
     }
-    return;
+   
   }
 
   async getAll(user, session, offset = 1) {
