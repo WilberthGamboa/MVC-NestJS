@@ -67,13 +67,13 @@ export class MyPcService {
     const pcs = await this.myPcModel
       .find({ user: new Types.ObjectId(user._id) })
       .lean()
-      .limit(1)
-      .skip(offset - 1);
+      .limit(3)
+      .skip((offset - 1)*3);
     const nextPcs = await this.myPcModel
       .find({ user: new Types.ObjectId(user._id) })
       .lean()
-      .limit(1)
-      .skip(offset);
+      .limit(3)
+      .skip(offset*3);
 
     // Validamos por si el usuario realiza paginado por url
 

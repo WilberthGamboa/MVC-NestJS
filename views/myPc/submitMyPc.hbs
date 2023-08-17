@@ -1,11 +1,25 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8" />
   <title>App</title>
   <script src="/bootstrap/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script>
+    var loadFile = function (event) {
+      var output = document.getElementById('output');
+      output.src = URL.createObjectURL(event.target.files[0]);
+      output.onload = function () {
+        URL.revokeObjectURL(output.src) // free memory
+      }
+    };
+  </script>
 </head>
+
 <body>
   {{> pcPartial}}
   <div class="container h-100">
@@ -13,7 +27,7 @@
       <div class="col-md-6">
         <div class="card mt-3">
           <div class="card-body">
-            <h5 class="card-title">Formulario</h5>
+            <h5 class="card-title">Nueva PC</h5>
             <form enctype="multipart/form-data" action="" method="post">
 
               <div class="mb-3">
@@ -28,7 +42,8 @@
 
               <div class="mb-3">
                 <label for="descripcion" class="form-label">Descripción</label>
-                <input type="text" name="descripcion" id="descripcion" class="form-control" placeholder="Descripción">
+                <textarea class="form-control" placeholder="Describe cada uno de los componentes aquí"
+                  id="descripcion"></textarea>
                 {{#each message}}
                 {{#if descripcion}}
                 <div class="alert alert-danger">{{descripcion}}</div>
@@ -36,17 +51,24 @@
                 {{/each}}
               </div>
 
-              <div class="mb-3">
-                <label for="file" class="form-label">Archivo</label>
-                <input type="file" name="file" id="file" class="form-control">
+              <div class="mb-3 text-center">
+                <div class="">
+                  <img id="output" class="rounded mb-3" width="300px" height="auto">
+                </div>
+                <label for="file" class="form-label btn btn-dark ms-3">Cargar imagen</i></label>
+                <input type="file" name="file" id="file" class="form-control" onchange="loadFile(event)"
+                  style="display: none;">
                 {{#each message}}
                 {{#if file}}
                 <div class="alert alert-danger">{{file}}</div>
                 {{/if}}
                 {{/each}}
               </div>
-
-              <input type="submit" value="Subir al servidor" class="btn btn-primary">
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="submit" class="btn btn-dark" title="Subir PC">
+                  <i class="fa-solid fa-floppy-disk"></i>
+                </button>
+              </div>
             </form>
           </div>
         </div>
@@ -54,4 +76,5 @@
     </div>
   </div>
 </body>
+
 </html>
