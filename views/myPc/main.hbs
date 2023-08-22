@@ -1,46 +1,77 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>App</title>
-  </head>
-  <body>
-    <h1>Mis computadoras</h1>
-        {{> pcPartial}}
-    {{#each pcsWithUrlImage}}
-          {{#if urlImage}}
-          <a href={{urlEditPc}}>
-         <img src={{urlImage}} alt="" width="400px" height="400px">
-         </a>
-          {{/if}}
-          {{#if urlEditPc}}
-             <p> {{urlEditPc}}</p>
-          {{/if}}
-          
-    {{/each}}
+<head>
+  <meta charset="utf-8" />
+  <title>Mis Computadoras</title>
+  <script src="/bootstrap/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <style>
+    h1.titulo {
+      color: #fff;
+      font-size: 1.15em;
+      font-weight: 900;
+      margin: 0 0 0.5em;
+      color: #505050;
+    }
 
+    @media (min-width: 450px) {
+      h1.titulo {
+        font-size: 3.55em;
+      }
+    }
 
-    
-  <div>
-      {{#if isEnabled.isEnabledBtnPreviousPage}}
-    <a href="http://localhost:3000/myPc/{{pagination.previousPage}}"> 
+    @media (min-width: 760px) {
+      h1.titulo {
+        font-size: 3.05em;
+      }
+    }
 
-      <input type="button" value="{{pagination.previousPage}}">
+    @media (min-width: 900px) {
+      h1.titulo {
+        font-size: 3.25em;
+        margin: 0 0 0.3em;
+      }
+    }
+  </style>
+</head>
 
-    </a>
-
-    {{/if}}
-    <p>
-      {{pagination.currentPage}}
-    </p>
-      {{#if isEnabled.isEnabledBtnNextPage}}
-    <a href="http://localhost:3000/myPc/{{pagination.nextPage}}"> 
-
-      <input type="button" value="{{pagination.nextPage}}">
-
-    </a>
-
-   {{/if}}
+<body>
+  {{> pcPartial}}
+  <h1 class="text-center titulo">PC's Cargadas</h1>
+  <div class="container text-center mt-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      {{#each pcsWithUrlImage}}
+      {{#if urlImage}}
+      <div class="col">
+        <div class="card h-100">
+          <img src={{urlImage}} class="card-img-top" width="auto" height="250px">
+          <div class="card-body">
+            <h5 class="card-title">{{nombre}}</h5>
+            <p class="card-text">{{descripcion}}</p>
+          </div>
+        </div>
+      </div>
+      {{/if}}
+      {{/each}}
+    </div>
   </div>
-  </body>
+  <nav class="mt-5">
+    <ul class="pagination justify-content-center">
+      {{#if isEnabled.isEnabledBtnPreviousPage}}
+      <li class="page-item">
+        <a class="page-link" href="http://localhost:3000/myPc/{{pagination.previousPage}}">Anterior</a>
+      </li>
+      {{/if}}
+      <li class="page-item">
+        <p class="page-link">{{pagination.currentPage}}</p>
+      </li>
+      {{#if isEnabled.isEnabledBtnNextPage}}
+      <li class="page-item">
+        <a class="page-link" href="http://localhost:3000/myPc/{{pagination.nextPage}}">Siguiente</a>
+      </li>
+      {{/if}}
+    </ul>
+  </nav>
+</body>
+
 </html>

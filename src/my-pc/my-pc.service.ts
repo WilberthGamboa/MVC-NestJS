@@ -61,12 +61,12 @@ export class MyPcService {
       .find({ user: new Types.ObjectId(user._id) })
       .lean()
       .limit(limit)
-      .skip(id - 1);
+      .skip((id - 1)*3);
     const nextPcs = await this.myPcModel
       .find({ user: new Types.ObjectId(user._id) })
       .lean()
       .limit(limit)
-      .skip(id);
+      .skip(id*3);
 
     //Desactivamos los botones
 
