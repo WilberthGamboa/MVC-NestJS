@@ -47,7 +47,7 @@ export class MyPcService {
   }
 
   async getAll(user, id:number) {
-    const limit = 1; 
+    const limit = 3; 
     let isEnabledBtnPreviousPage = true;
     let isEnabledBtnNextPage = true;
     const pagination = {
