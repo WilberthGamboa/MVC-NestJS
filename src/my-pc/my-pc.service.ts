@@ -31,7 +31,6 @@ export class MyPcService {
     const fileNameUuid = fileNamer(createMyPcDto.file.extension);
     saveImgDisk(createMyPcDto.file,fileNameUuid);
 
-    // Esta parte se encarga de almacenar la información del dto en la db
     try {
       const id = new Types.ObjectId(user._id);
      const userEntity = {
@@ -47,42 +46,31 @@ export class MyPcService {
    
   }
 
-  async getAll(user, session, offset = 1) {
+  async getAll(user, id:number) {
+    const limit = 1; 
     let isEnabledBtnPreviousPage = true;
     let isEnabledBtnNextPage = true;
-
-    // validamos el offset
-    offset = Number(offset);
-    if (!isNaN(offset)) {
-      if (offset <= 0) {
-        offset = 1;
-      }
-      session.currentPage = offset;
-      session.previousPage = session.currentPage - 1;
-      session.nextPage = session.currentPage + 1;
-    } else {
-      offset = 1;
-      session.currentPage = offset;
-      session.previousPage = session.currentPage - 1;
-      session.nextPage = session.currentPage + 1;
+    const pagination = {
+      currentPage:id,
+      nextPage:id+1,
+      previousPage:id-1
     }
+
     // Obtenemos las pc
     const pcs = await this.myPcModel
       .find({ user: new Types.ObjectId(user._id) })
       .lean()
-      .limit(1)
-      .skip(offset - 1);
+      .limit(limit)
+      .skip(id - 1);
     const nextPcs = await this.myPcModel
       .find({ user: new Types.ObjectId(user._id) })
       .lean()
-      .limit(1)
-      .skip(offset);
-
-    // Validamos por si el usuario realiza paginado por url
+      .limit(limit)
+      .skip(id);
 
     //Desactivamos los botones
 
-    if (session.currentPage === 1) {
+    if (id === 1) {
       isEnabledBtnPreviousPage = false;
     }
 
@@ -103,33 +91,14 @@ export class MyPcService {
         urlEditPc
       };
     });
-    /*
-
-        if (!session.currentPage || session.currentPage <= 1 || offset === 0) {
-
-            session.currentPage = 1;
-            session.nextPage = 2;
-            session.previousPage = 1;
-        } else {
-            session.currentPage = offset;
-
-            session.nextPage = offset + 1;
-            session.previousPage = offset - 1;
-        }
-
-*/
-
+  
     return {
       pcsWithUrlImage,
       isEnabled: {
         isEnabledBtnPreviousPage,
         isEnabledBtnNextPage,
       },
-      pagination: {
-        currentPage: session.currentPage,
-        nextPage: session.nextPage,
-        previousPage: session.previousPage,
-      },
+     pagination
     };
   }
 

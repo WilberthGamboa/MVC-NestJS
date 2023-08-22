@@ -14,14 +14,12 @@ import {
 import { MyPcService } from './my-pc.service';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
 import { Request, Response } from 'express';
-import * as fs from 'fs';
-import { join } from 'node:path';
 import { FormDataRequest } from 'nestjs-form-data';
 import { CreateMyPcDto } from './dto/create-my-pc.dto';
 import { UpdateMyPcDto } from './dto/update-my-pc.dto';
 import { MyPcExceptionFilter } from './filters/my-pc.exceptionFilter';
+import { MyPcsPipe } from './my-pcs.pipe';
 
-import { fileNamer } from './helper/fileNamer.helper';
 @Controller('myPc')
 @UseFilters(MyPcExceptionFilter)
 export class MyPcController {
@@ -43,9 +41,9 @@ export class MyPcController {
   async getMyPcs(
     @Req() req: Request,
     @Session() session: Record<string, any>,
-    @Param('id') id,
+    @Param('id',MyPcsPipe) id:number,
   ) {
-    return await this.myPcService.getAll(req.user, session, id);
+    return await this.myPcService.getAll(req.user,id);
   }
 
   //*Realiza la petición para subir la pc */
@@ -58,13 +56,8 @@ export class MyPcController {
     @Req() req: Request,
   ) {
 
-    /*
-    const fileName = fileNamer(createMyPcDto.file.extension);
-    const filePath = join(__dirname,'..','..','uploads',fileName);
-    */
-   
-
-    await this.myPcService.submitMyPc(
+  
+   await this.myPcService.submitMyPc(
       createMyPcDto,
       req.user
     );
