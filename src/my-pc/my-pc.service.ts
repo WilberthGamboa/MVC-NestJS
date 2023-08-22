@@ -9,9 +9,10 @@ import { Model, Types } from 'mongoose';
 import { User } from 'src/auth/entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { MyPc } from './entities/my-pc.entity';
-
 import { existsSync } from 'fs';
 import { join } from 'path';
+import { fileNamer } from './helper/fileNamer.helper';
+import { saveImgDisk } from './helper/saveImgDisk.helper';
 
 @Injectable()
 export class MyPcService {
@@ -24,62 +25,52 @@ export class MyPcService {
 
   async submitMyPc(
     createMyPcDto: CreateMyPcDto,
-    user,
-    fileName
+    user:any
   ) {
-    let userEntity;
-    const path = fileName;
+    //TODO: Almacenar la imagen en disco
+    const fileNameUuid = fileNamer(createMyPcDto.file.extension);
+    saveImgDisk(createMyPcDto.file,fileNameUuid);
+
     try {
       const id = new Types.ObjectId(user._id);
-      userEntity = {
+     const userEntity = {
         ...createMyPcDto,
         user: id,
-        image: path,
+        image: fileNameUuid,
       };
       await this.myPcModel.create(userEntity);
     } catch (error) {
       console.log(error);
       this.handleDbException(error);
     }
-    return;
+   
   }
 
-  async getAll(user, session, offset = 1) {
+  async getAll(user, id:number) {
+    const limit = 1; 
     let isEnabledBtnPreviousPage = true;
     let isEnabledBtnNextPage = true;
-
-    // validamos el offset
-    offset = Number(offset);
-    if (!isNaN(offset)) {
-      if (offset <= 0) {
-        offset = 1;
-      }
-      session.currentPage = offset;
-      session.previousPage = session.currentPage - 1;
-      session.nextPage = session.currentPage + 1;
-    } else {
-      offset = 1;
-      session.currentPage = offset;
-      session.previousPage = session.currentPage - 1;
-      session.nextPage = session.currentPage + 1;
+    const pagination = {
+      currentPage:id,
+      nextPage:id+1,
+      previousPage:id-1
     }
+
     // Obtenemos las pc
     const pcs = await this.myPcModel
       .find({ user: new Types.ObjectId(user._id) })
       .lean()
-      .limit(3)
-      .skip((offset - 1)*3);
+      .limit(limit)
+      .skip((id - 1)*3);
     const nextPcs = await this.myPcModel
       .find({ user: new Types.ObjectId(user._id) })
       .lean()
-      .limit(3)
-      .skip(offset*3);
-
-    // Validamos por si el usuario realiza paginado por url
+      .limit(limit)
+      .skip(id*3);
 
     //Desactivamos los botones
 
-    if (session.currentPage === 1) {
+    if (id === 1) {
       isEnabledBtnPreviousPage = false;
     }
 
@@ -100,33 +91,14 @@ export class MyPcService {
         urlEditPc
       };
     });
-    /*
-
-        if (!session.currentPage || session.currentPage <= 1 || offset === 0) {
-
-            session.currentPage = 1;
-            session.nextPage = 2;
-            session.previousPage = 1;
-        } else {
-            session.currentPage = offset;
-
-            session.nextPage = offset + 1;
-            session.previousPage = offset - 1;
-        }
-
-*/
-
+  
     return {
       pcsWithUrlImage,
       isEnabled: {
         isEnabledBtnPreviousPage,
         isEnabledBtnNextPage,
       },
-      pagination: {
-        currentPage: session.currentPage,
-        nextPage: session.nextPage,
-        previousPage: session.previousPage,
-      },
+     pagination
     };
   }
 
