@@ -90,12 +90,14 @@ export class MyPcService {
     // Agregamos la url de las fotos
     const pcsWithUrlImage = pcs.map((pc) => {
       // console.log(x)
-      const { image, ...restoPc } = pc;
+      const { image,_id, ...restoPc } = pc;
       const urlImage = 'http://localhost:3000/myPc/see/' + image;
+      const urlEditPc = 'http://localhost:3000/myPc/edit/'+_id;
       // console.log(nuevaImagen)
       return {
         ...restoPc,
         urlImage,
+        urlEditPc
       };
     });
     /*
@@ -113,6 +115,7 @@ export class MyPcService {
         }
 
 */
+
     return {
       pcsWithUrlImage,
       isEnabled: {
@@ -144,5 +147,28 @@ export class MyPcService {
     }
 
     return path;
+  }
+  async findMyPc(id:string,user){
+    try {
+    const pc =  await this.myPcModel.findById(id);
+    if (pc.user.toString()!=user._id) {
+      throw new BadRequestException('La computadora no le pertenece');
+      
+    }
+
+    return pc;
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+  async updateMyPc(id:string,user,updateMyPcDto:UpdateMyPcDto){
+    
+   const pc = await this.findMyPc(id,user);
+
+   if (pc) {
+    await this.myPcModel.findByIdAndUpdate(pc.id,updateMyPcDto);
+   }
+
   }
 }

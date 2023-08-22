@@ -26,6 +26,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { fileNamer } from './helper/fileNamer.helper';
 import * as fs from 'fs';
 import { join } from 'node:path';
+import { FormDataRequest } from 'nestjs-form-data';
+import { UpdateMyPcDto } from './dto/update-my-pc.dto';
 @Controller('myPc')
 @UseFilters(MyPcExceptionFilter)
 export class MyPcController {
@@ -55,47 +57,60 @@ export class MyPcController {
 
   //*Realiza la petición para subir la pc */
   @UseGuards(AuthenticatedGuard)
+  @FormDataRequest()
   @Post('/submit')
-  @UseInterceptors(
-    FileInterceptor('file')
-    
-  )
   async submitMyPc(
-    @Body() createMyPcDto: CreateMyPcDto,
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new MaxFileSizeValidator({ maxSize: 100000000000000000 }),
-          new FileTypeValidator({ fileType: 'image/jpeg|png' }),
-        ],
-      }),
-    )
-    file: Express.Multer.File,
-   
+    @Body() createMyPcDto: CreateMyPcDto, 
     @Res() res: Response,
     @Req() req: Request,
   ) {
-    const fileName = fileNamer(file);
+    console.log(createMyPcDto.file.extension);
+    const fileName = fileNamer(createMyPcDto.file.extension);
     const filePath = join(__dirname,'..','..','uploads',fileName);
-    console.log(filePath)
-    console.log(file.buffer)
-    fs.writeFile(filePath, file.buffer, (err) => {
+    //console.log(filePath)
+    //console.log(file.buffer)
+  
+    fs.writeFile(filePath, createMyPcDto.file.buffer, (err) => {
       if (err) {
         console.error('Error al guardar el archivo:', err);
       } else {
         console.log('El buffer ha sido guardado exitosamente.');
       }
     });
-  
+
+
     await this.myPcService.submitMyPc(
       createMyPcDto,
       req.user,
       fileName
    
     );
-   
+  
     res.redirect('/myPc/submit');
   }
+  @FormDataRequest()
+  @Post('edit')
+  async updateMyPc(@Req() req,@Res()res:Response, @Body() updateMyPcDto: UpdateMyPcDto){
+   // console.log(updateMyPcDto)
+  if (updateMyPcDto.file) {
+    console.log("hay que cambiar el archivo");
+    
+  }
+   await this.myPcService.updateMyPc(updateMyPcDto.id,req.user,updateMyPcDto);
+    res.redirect('/myPc/edit/'+updateMyPcDto.id);
+ 
+
+  }
+  @Get('edit/:id')
+  @Render('myPc/editMyPc')
+  async updateRenderMyPc(@Param('id') id: string,@Req() req){
+    const pc =  await this.myPcService.findMyPc(id,req.user);
+   return {
+    pc,
+    id
+   }
+  }
+
 
   //*Permite renderizar las imágenes */
   @UseGuards(AuthenticatedGuard)
@@ -108,4 +123,7 @@ export class MyPcController {
 
     res.sendFile(path);
   }
+
+
+
 }
