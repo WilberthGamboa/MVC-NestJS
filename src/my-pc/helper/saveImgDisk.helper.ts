@@ -1,11 +1,10 @@
-import { MemoryStoredFile } from 'nestjs-form-data';
 import * as fs from 'node:fs';
-import { fileNamer } from './fileNamer.helper';
 import { join } from 'node:path';
+import { MemoryStoredFile } from 'nestjs-form-data';
 
 export const saveImgDisk = (file: MemoryStoredFile,fileNameUuid:string) => {
    
-    const filePath = join(__dirname,'..','..','uploads',fileNameUuid);
+    const filePath = join(__dirname,'..','..','..','uploads',fileNameUuid);
 
     fs.writeFile(filePath, file.buffer, (err) => {
         if (err) {
@@ -15,5 +14,5 @@ export const saveImgDisk = (file: MemoryStoredFile,fileNameUuid:string) => {
         }
       });
   
-    return 
+   
 }
