@@ -47,7 +47,7 @@ jobs:
        env:
         NEW_VERSION: ${{steps.version.outputs.version}} 
        run: | 
-        docker push docker build -t wilberthgamboa/mvc-nestjs:$NEW_VERSION
-        docker build -t wilberthgamboa/mvc-nestjs:latest
+        docker push wilberthgamboa/mvc-nestjs:$NEW_VERSION
+        docker push wilberthgamboa/mvc-nestjs:latest
 #    - name: Build the Docker image
 #      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
