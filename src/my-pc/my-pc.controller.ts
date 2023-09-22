@@ -109,6 +109,13 @@ export class MyPcController {
     res.sendFile(path);
   }
 
+  @Get('delete/:id')
+  async deleteMyPc(@Param('id') id: string, @Req() req, @Res() res:Response){
+    await this.myPcService.deleteMyPc(id,req.user)
+    res.redirect('/myPc')
+    return;
+
+  }
 
 
 }

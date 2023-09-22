@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8" />
   <title>Mis Computadoras</title>
-  <script src="/bootstrap/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  {{> importaciones}}
   <style>
     h1.titulo {
       color: #fff;
@@ -48,8 +48,12 @@
           <div class="card-body">
             <h5 class="card-title">{{nombre}}</h5>
             <p class="card-text">{{descripcion}}</p>
+            <a href={{urlEditPc}}><input type="button" value="Editar" class="btn btn-primary"></a>
+            <a href={{urlDelete}}><input type="button" class="btn btn-danger" value="Eliminar"></a>
           </div>
         </div>
+
+
         <div>
           <a href={{urlEditPc}}>
         <input type="button" value="Editar">
@@ -59,9 +63,9 @@
 
       </a>
      
+
       </div>
-      </div>
-      
+
       {{/if}}
       {{/each}}
     </div>

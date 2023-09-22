@@ -4,11 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <title>App</title>
-  <script src="/bootstrap/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  {{> importaciones}}
   <script>
     var loadFile = function (event) {
       var output = document.getElementById('output');
@@ -30,11 +26,11 @@
             <h5 class="card-title">Nueva PC</h5>
             <form enctype="multipart/form-data" action="/myPc/edit" method="post">
               <div>
-                 <input type="text" value={{id}} name="id" id="id" class="form-control" placeholder="Nombre">
+                <input type="text" value={{id}} name="id" id="id" class="form-control" placeholder="ID" readonly hidden="true">
               </div>
               <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" name="nombre" id="nombre" value={{pc.nombre}} class="form-control" placeholder="Nombre">
+                <input type="text" name="nombre" id="nombre" value="{{pc.nombre}}" class="form-control" placeholder="Nombre">
                 {{#each message}}
                 {{#if nombre}}
                 <div class="alert alert-danger">{{nombre}}</div>
@@ -44,8 +40,7 @@
 
               <div class="mb-3">
                 <label for="descripcion" class="form-label">Descripción</label>
-                <textarea class="form-control" name="descripcion" value={{pc.descripcion}} placeholder="Describe cada uno de los componentes aquí"
-                  id="descripcion"></textarea>
+                <textarea class="form-control" name="descripcion" placeholder="Describe cada uno de los componentes aquí" id="descripcion">{{pc.descripcion}}</textarea>
                 {{#each message}}
                 {{#if descripcion}}
                 <div class="alert alert-danger">{{descripcion}}</div>
@@ -57,7 +52,7 @@
                 <div class="">
                   <img id="output" class="rounded mb-3" width="300px" height="auto">
                 </div>
-                <label for="file" class="form-label btn btn-dark ms-3">Cargar imagen</i></label>
+                <label for="file" class="form-label btn btn-success ms-3">Cargar imagen</i></label>
                 <input type="file" name="file" id="file" class="form-control" onchange="loadFile(event)"
                   style="display: none;">
                 {{#each message}}
@@ -67,9 +62,8 @@
                 {{/each}}
               </div>
               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button type="submit" class="btn btn-dark" title="Subir PC">
-                  <i class="fa-solid fa-floppy-disk"></i>
-                </button>
+                <button type="submit" class="btn btn-dark" title="Subir PC">Guardar</button>
+                <a href="/myPc" class="btn btn-dark" title="Subir PC">Cancelar</a>
               </div>
             </form>
           </div>

@@ -80,13 +80,14 @@ export class MyPcService {
     }
 
     // Agregamos la url de las fotos
+    const baseImageUrl = process.env.URL;
     const pcsWithUrlImage = pcs.map((pc) => {
-      // console.log(x)
+      // console.log(x);
       const { image,_id, ...restoPc } = pc;
-      const urlImage = 'http://localhost:3000/myPc/see/' + image;
-      const urlEditPc = 'http://localhost:3000/myPc/edit/'+_id;
-      const urlDelete = 'http://localhost:3000/myPc/delete/'+_id;
-      // console.log(nuevaImagen)
+      const urlImage = baseImageUrl + 'myPc/see/' + image;
+      const urlEditPc = baseImageUrl + 'myPc/edit/' + _id;
+      const urlDelete = baseImageUrl + 'myPc/delete/' +_id;
+
       return {
         ...restoPc,
         urlImage,
@@ -172,6 +173,7 @@ export class MyPcService {
    }
 
   }
+
   async deleteMyPc(id, user){
     const pc = await this.findMyPc(id, user);
     console.log(pc)
