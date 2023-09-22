@@ -87,6 +87,7 @@ export class MyPcService {
       const urlImage = baseImageUrl + 'myPc/see/' + image;
       const urlEditPc = baseImageUrl + 'myPc/edit/' + _id;
       const urlDelete = baseImageUrl + 'myPc/delete/' +_id;
+
       return {
         ...restoPc,
         urlImage,
