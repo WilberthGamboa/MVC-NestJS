@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import {
   BadRequestException,
   Injectable,
@@ -47,7 +48,7 @@ export class MyPcService {
   }
 
   async getAll(user, id:number) {
-    const limit = 1; 
+    const limit = 3; 
     let isEnabledBtnPreviousPage = true;
     let isEnabledBtnNextPage = true;
     const pagination = {
@@ -134,12 +135,38 @@ export class MyPcService {
     }
 
   }
-  async updateMyPc(id:string,user,updateMyPcDto:UpdateMyPcDto){
-    
-   const pc = await this.findMyPc(id,user);
+  async updateMyPc(id: string, user, updateMyPcDto: UpdateMyPcDto) {
+    let updateTemporal = {
+      
+    }
+    updateTemporal = {
+      ...updateMyPcDto
+    }
+    const pc = await this.findMyPc(id, user);
+    if (pc) {
+      if (updateMyPcDto.file) {
+       
+        const filePath = join(__dirname,'..','..','..','uploads',pc.image);
 
-   if (pc) {
-    await this.myPcModel.findByIdAndUpdate(pc.id,updateMyPcDto);
+    
+
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.error('Error al eliminar el archivo:', err);
+          } else {
+            console.log('Archivo eliminado exitosamente.');
+          }
+        });
+        const fileNameUuid = fileNamer(updateMyPcDto.file.extension);
+        saveImgDisk(updateMyPcDto.file,fileNameUuid);
+        
+        updateTemporal = {
+          ...updateMyPcDto,
+          image: fileNameUuid,
+        }
+
+    }
+    await this.myPcModel.findByIdAndUpdate(pc.id,updateTemporal);
    }
 
   }

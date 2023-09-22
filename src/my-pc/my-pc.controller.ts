@@ -64,6 +64,7 @@ export class MyPcController {
   
     res.redirect('/myPc/submit');
   }
+  //*Realiza la petición para actualizar la pc */
   @FormDataRequest()
   @Post('edit')
   async updateMyPc(@Req() req,@Res()res:Response, @Body() updateMyPcDto: UpdateMyPcDto){
