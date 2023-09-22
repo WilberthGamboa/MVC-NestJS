@@ -80,12 +80,12 @@ export class MyPcService {
     }
 
     // Agregamos la url de las fotos
+    const baseImageUrl = process.env.URL;
     const pcsWithUrlImage = pcs.map((pc) => {
-      // console.log(x)
+      // console.log(x);
       const { image,_id, ...restoPc } = pc;
-      const urlImage = 'http://localhost:3000/myPc/see/' + image;
-      const urlEditPc = 'http://localhost:3000/myPc/edit/'+_id;
-      // console.log(nuevaImagen)
+      const urlImage = baseImageUrl + 'myPc/see/' + image;
+      const urlEditPc = baseImageUrl + 'myPc/edit/' + _id;
       return {
         ...restoPc,
         urlImage,

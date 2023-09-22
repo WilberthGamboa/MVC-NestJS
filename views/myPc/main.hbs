@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8" />
   <title>Mis Computadoras</title>
@@ -48,20 +49,12 @@
           <div class="card-body">
             <h5 class="card-title">{{nombre}}</h5>
             <p class="card-text">{{descripcion}}</p>
+            <a href={{urlEditPc}}><input type="button" value="Editar" class="btn btn-primary"></a>
+            <a href=""><input type="button" class="btn btn-danger" value="Eliminar"></a>
           </div>
         </div>
-        <div>
-          <a href={{urlEditPc}}>
-        <input type="button" value="Editar">
-          </a>
-      <a href="">
-           <input type="button" value="Eliminar">
+      </div>
 
-      </a>
-     
-      </div>
-      </div>
-      
       {{/if}}
       {{/each}}
     </div>

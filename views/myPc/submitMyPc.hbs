@@ -55,7 +55,7 @@
                 <div class="">
                   <img id="output" class="rounded mb-3" width="300px" height="auto">
                 </div>
-                <label for="file" class="form-label btn btn-dark ms-3">Cargar imagen</i></label>
+                <label for="file" class="form-label btn btn-success ms-3">Cargar imagen</i></label>
                 <input type="file" name="file" id="file" class="form-control" onchange="loadFile(event)"
                   style="display: none;">
                 {{#each message}}
@@ -65,9 +65,8 @@
                 {{/each}}
               </div>
               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button type="submit" class="btn btn-dark" title="Subir PC">
-                  <i class="fa-solid fa-floppy-disk"></i>
-                </button>
+                <button type="submit" class="btn btn-dark" title="Subir PC">Guardar</button>
+                <a href="/" class="btn btn-dark" title="Cancelar">Cancelar</a>
               </div>
             </form>
           </div>
