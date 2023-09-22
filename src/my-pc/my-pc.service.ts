@@ -85,11 +85,13 @@ export class MyPcService {
       const { image,_id, ...restoPc } = pc;
       const urlImage = 'http://localhost:3000/myPc/see/' + image;
       const urlEditPc = 'http://localhost:3000/myPc/edit/'+_id;
+      const urlDelete = 'http://localhost:3000/myPc/delete/'+_id;
       // console.log(nuevaImagen)
       return {
         ...restoPc,
         urlImage,
-        urlEditPc
+        urlEditPc,
+        urlDelete,
       };
     });
   
@@ -169,5 +171,10 @@ export class MyPcService {
     await this.myPcModel.findByIdAndUpdate(pc.id,updateTemporal);
    }
 
+  }
+  async deleteMyPc(id, user){
+    const pc = await this.findMyPc(id, user);
+    console.log(pc)
+    await this.myPcModel.deleteOne(pc._id)
   }
 }

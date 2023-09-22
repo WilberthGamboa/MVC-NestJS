@@ -67,7 +67,7 @@ export class MyPcController {
   //*Realiza la petición para actualizar la pc */
   @FormDataRequest()
   @Post('edit')
-  async updateMyPc(@Req() req,@Res()res:Response, @Body() updateMyPcDto: UpdateMyPcDto){
+  async updateMyPc(@Req() req,@Res() res:Response, @Body() updateMyPcDto: UpdateMyPcDto){
    // console.log(updateMyPcDto)
   if (updateMyPcDto.file) {
     console.log("hay que cambiar el archivo");
@@ -86,6 +86,14 @@ export class MyPcController {
     pc,
     id
    }
+  }
+  
+  @Get('delete/:id')
+  async deleteMyPc(@Param('id') id: string, @Req() req, @Res() res:Response){
+    await this.myPcService.deleteMyPc(id,req.user)
+    res.redirect('/myPc')
+    return;
+    
   }
 
 
