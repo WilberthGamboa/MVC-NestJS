@@ -4,11 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <title>App</title>
-  <script src="/bootstrap/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  {{> importaciones}}
   <script>
     var loadFile = function (event) {
       var output = document.getElementById('output');
@@ -30,8 +26,7 @@
             <h5 class="card-title">Nueva PC</h5>
             <form enctype="multipart/form-data" action="/myPc/edit" method="post">
               <div>
-                <label for="nombre" class="form-label">ID</label>
-                <input type="text" value={{id}} name="id" id="id" class="form-control" placeholder="ID" disabled>
+                <input type="text" value={{id}} name="id" id="id" class="form-control" placeholder="ID" readonly hidden="true">
               </div>
               <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
