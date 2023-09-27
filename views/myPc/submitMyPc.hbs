@@ -29,7 +29,7 @@
               <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
                 <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre">
-                {{#each message}}
+                {{#each nombre}}
                 {{#if nombre}}
                 <div class="alert alert-danger">{{nombre}}</div>
                 {{/if}}
@@ -38,8 +38,8 @@
 
               <div class="mb-3">
                 <label for="descripcion" class="form-label">Descripción</label>
-                <textarea class="form-control" name="descripcion" placeholder="Describe cada uno de los componentes aquí"
-                  id="descripcion"></textarea>
+                <textarea class="form-control" name="descripcion"
+                  placeholder="Describe cada uno de los componentes aquí" id="descripcion"></textarea>
                 {{#each message}}
                 {{#if descripcion}}
                 <div class="alert alert-danger">{{descripcion}}</div>
@@ -56,7 +56,9 @@
                   style="display: none;">
                 {{#each message}}
                 {{#if file}}
-                <div class="alert alert-danger">{{file}}</div>
+                {{#each file}}
+                <div class="alert alert-danger">{{this}}</div>
+                {{/each}}
                 {{/if}}
                 {{/each}}
               </div>

@@ -19,6 +19,9 @@ import { CreateMyPcDto } from './dto/create-my-pc.dto';
 import { UpdateMyPcDto } from './dto/update-my-pc.dto';
 import { MyPcExceptionFilter } from './filters/my-pc.exceptionFilter';
 import { MyPcsPipe } from './my-pcs.pipe';
+import { MyPcFormErros, MyPcFormErrosHbs } from './interfaces/my-pc-formErros.interface';
+import { IRequestFlash } from 'src/common/interfaces/IRequeestFlash.interface';
+
 
 @Controller('myPc')
 @UseFilters(MyPcExceptionFilter)
@@ -29,10 +32,10 @@ export class MyPcController {
   @UseGuards(AuthenticatedGuard)
   @Get('submit')
   @Render('myPc/submitMyPc')
-  renderSubmitMyPc(@Req() req) {
-    return {
-      message: req.flash('messages'),
-    };
+  renderSubmitMyPc(@Req() req : IRequestFlash ): MyPcFormErrosHbs {
+    const message = req.flash('messages') as MyPcFormErros;
+    return {message};
+   
   }
   //*Renderiza MisComputadoras */
   @UseGuards(AuthenticatedGuard)

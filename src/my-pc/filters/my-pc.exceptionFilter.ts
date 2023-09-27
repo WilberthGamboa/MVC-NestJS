@@ -9,10 +9,9 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { MyPcFormErros } from '../interfaces/my-pc-formErros.interface';
+import { IRequestFlash } from 'src/common/interfaces/IRequeestFlash.interface';
 
-interface IRequestFlash extends Request {
-  flash: any;
-}
+
 
 @Catch(HttpException)
 export class MyPcExceptionFilter implements ExceptionFilter {
@@ -41,7 +40,7 @@ console.log(errorResponse.message)
           if (message.includes('nombre')) {
             myPcFormErros.nombre.push(message)
           }
-          else if(message.includes('descripcion')){
+          else if(message.includes('descripción')){
             myPcFormErros.descripcion.push(message)
           }
           else if(message.includes('imagen')){
@@ -53,19 +52,7 @@ console.log(errorResponse.message)
           }
         });
       }
-      /*
-      if (!Array.isArray(errorResponse.message)) {
-        if (errorResponse.message.includes('imagen')) {
-          myPcFormErros.file.push(errorResponse.message);
-        }
-        else if(errorResponse.message.includes('type')){
-          myPcFormErros.file.push('La imagen debe ser un jpeg, jpg o png');
-        }
-        else if(errorResponse.message.includes('size')){
-          myPcFormErros.file.push('El tamaño de la imagen es muy grande');
-        }
-      }
-*/
+    
       request.flash('messages', myPcFormErros);
       response.redirect('/myPc/submit');
     } else if (exception instanceof UnauthorizedException) {
@@ -80,6 +67,7 @@ console.log(errorResponse.message)
         }
         errorResponse.message = messages;
       }
+    
       request.flash('messages', errorResponse.message);
       response.redirect('/auth/login');
     } else {
