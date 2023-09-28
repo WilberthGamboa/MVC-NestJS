@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { MyPcService } from './my-pc.service';
 import { AuthenticatedGuard } from 'src/auth/guards/authenticated.guard';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { FormDataRequest } from 'nestjs-form-data';
 import { CreateMyPcDto } from './dto/create-my-pc.dto';
 import { UpdateMyPcDto } from './dto/update-my-pc.dto';
@@ -23,6 +23,7 @@ import {
   MyPcFormErrosHbs,
 } from './interfaces/my-pc-formErros.interface';
 import { IRequestFlash } from 'src/common/interfaces/IRequeestFlash.interface';
+import { IRequestUser } from 'src/common/interfaces/IRequestUser.interface';
 
 @Controller('myPc')
 @UseFilters(MyPcExceptionFilter)
@@ -41,8 +42,8 @@ export class MyPcController {
   @UseGuards(AuthenticatedGuard)
   @Get('/:id?')
   @Render('myPc/main')
-  async getMyPcs(@Req() req: Request, @Param('id', MyPcsPipe) id: number) {
-    return await this.myPcService.getAll(req.user, id);
+  async getMyPcs(@Req() req: IRequestUser, @Param('id', MyPcsPipe) id: number) {
+    return await this.myPcService.getAllMyPc(req.user, id);
   }
 
   //*Realiza la petición para subir la pc */
@@ -52,7 +53,7 @@ export class MyPcController {
   async submitMyPc(
     @Body() createMyPcDto: CreateMyPcDto,
     @Res() res: Response,
-    @Req() req: Request,
+    @Req() req: IRequestUser,
   ) {
     await this.myPcService.submitMyPc(createMyPcDto, req.user);
 
@@ -62,7 +63,7 @@ export class MyPcController {
   @FormDataRequest()
   @Post('edit')
   async updateMyPc(
-    @Req() req: IRequestFlash,
+    @Req() req: IRequestUser,
     @Res() res: Response,
     @Body() updateMyPcDto: UpdateMyPcDto,
   ) {
@@ -75,19 +76,22 @@ export class MyPcController {
   }
   @Get('edit/:id')
   @Render('myPc/editMyPc')
-  async updateRenderMyPc(@Param('id') id: string, @Req() req) {
+  async updateRenderMyPc(@Param('id') id: string, @Req() req: IRequestUser) {
     const pc = await this.myPcService.findMyPc(id, req.user);
     return {
       pc,
       id,
     };
   }
-
+  /* Borrar y redirecciona al menu*/
   @Get('delete/:id')
-  async deleteMyPc(@Param('id') id: string, @Req() req, @Res() res: Response) {
+  async deleteMyPc(
+    @Param('id') id: string,
+    @Req() req: IRequestUser,
+    @Res() res: Response,
+  ) {
     await this.myPcService.deleteMyPc(id, req.user);
     res.redirect('/myPc');
-    return;
   }
 
   //*Permite renderizar las imágenes */

@@ -1,4 +1,4 @@
-import { Get, Controller, Render, UseFilters } from '@nestjs/common';
+import { Get, Controller, Render, UseFilters, Req } from '@nestjs/common';
 import { NotFoundFilter } from './common/filters/notFoundFilter-exceptions.filter';
 
 @Controller()
@@ -6,7 +6,8 @@ import { NotFoundFilter } from './common/filters/notFoundFilter-exceptions.filte
 export class AppController {
   @Get('/')
   @Render('index')
-  root() {
-    return;
+  root(@Req() req) {
+    const isLogin = true;
+    if (req.user) return { isLogin };
   }
 }
