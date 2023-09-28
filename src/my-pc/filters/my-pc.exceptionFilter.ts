@@ -11,22 +11,20 @@ import { Request, Response } from 'express';
 import { MyPcFormErros } from '../interfaces/my-pc-formErros.interface';
 import { IRequestFlash } from 'src/common/interfaces/IRequeestFlash.interface';
 
-
-
 @Catch(HttpException)
 export class MyPcExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
-   // console.log(exception.cause);
+    // console.log(exception.cause);
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<IRequestFlash>();
- 
+
     const errorResponse = exception.getResponse() as {
       statusCode: number;
       message: string | string[];
       error: string;
     };
-console.log(errorResponse.message)
+    console.log(errorResponse.message);
     if (exception instanceof BadRequestException) {
       const myPcFormErros: MyPcFormErros = {
         nombre: [],
@@ -34,25 +32,21 @@ console.log(errorResponse.message)
         file: [],
         everyone: [],
       };
-      
+
       if (Array.isArray(errorResponse.message)) {
         errorResponse.message.forEach((message) => {
           if (message.includes('nombre')) {
-            myPcFormErros.nombre.push(message)
-          }
-          else if(message.includes('descripción')){
-            myPcFormErros.descripcion.push(message)
-          }
-          else if(message.includes('imagen')){
-            myPcFormErros.file.push(message)
-
-          }
-          else{
-            myPcFormErros.everyone.push(message)
+            myPcFormErros.nombre.push(message);
+          } else if (message.includes('descripción')) {
+            myPcFormErros.descripcion.push(message);
+          } else if (message.includes('imagen')) {
+            myPcFormErros.file.push(message);
+          } else {
+            myPcFormErros.everyone.push(message);
           }
         });
       }
-    
+
       request.flash('messages', myPcFormErros);
       response.redirect('/myPc/submit');
     } else if (exception instanceof UnauthorizedException) {
@@ -67,7 +61,7 @@ console.log(errorResponse.message)
         }
         errorResponse.message = messages;
       }
-    
+
       request.flash('messages', errorResponse.message);
       response.redirect('/auth/login');
     } else {
