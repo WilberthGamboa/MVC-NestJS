@@ -8,10 +8,10 @@
 </head>
 <body>
   {{> main}}
-  <h1 class="text-center titulo">PC's Cargadas</h1>
+  <h1 class="text-center titulo">Mis pc</h1>
   <div class="container text-center mt-5">
     <div class="row row-cols-1 row-cols-md-3 g-4">
-      {{#each pcsWithUrlImage}}
+      {{#each allMyPc.pcsWithUrlImage}}
       {{#if urlImage}}
       <div class="col">
         <div class="card h-100">
@@ -30,17 +30,17 @@
   </div>
   <nav class="mt-5">
     <ul class="pagination justify-content-center">
-      {{#if isEnabled.isEnabledBtnPreviousPage}}
+      {{#if allMyPc.isEnabled.isEnabledBtnPreviousPage}}
       <li class="page-item">
-        <a class="page-link" href="http://localhost:3000/myPc/{{pagination.previousPage}}">Anterior</a>
+        <a class="page-link" href="{{allMyPc.baseUrl}}myPc/{{allMyPc.pagination.previousPage}}">Anterior</a>
       </li>
       {{/if}}
       <li class="page-item">
-        <p class="page-link">{{pagination.currentPage}}</p>
+        <p class="page-link">{{allMyPc.pagination.currentPage}}</p>
       </li>
-      {{#if isEnabled.isEnabledBtnNextPage}}
+      {{#if allMyPc.isEnabled.isEnabledBtnNextPage}}
       <li class="page-item">
-        <a class="page-link" href="http://localhost:3000/myPc/{{pagination.nextPage}}">Siguiente</a>
+        <a class="page-link" href="{{allMyPc.baseUrl}}myPc/{{allMyPc.pagination.nextPage}}">Siguiente</a>
       </li>
       {{/if}}
     </ul>

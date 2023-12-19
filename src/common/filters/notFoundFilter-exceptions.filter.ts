@@ -11,12 +11,14 @@ import { Response } from 'express';
 @Catch(HttpException)
 export class NotFoundFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
+ 
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
     if (exception instanceof NotFoundException) {
       response.render('errors/404');
     } else {
+      console.log('xd')
     }
   }
 }

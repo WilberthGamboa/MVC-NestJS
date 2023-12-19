@@ -28,22 +28,29 @@ import { IRequestUser } from 'src/common/interfaces/IRequestUser.interface';
 @Controller('myPc')
 @UseFilters(MyPcExceptionFilter)
 export class MyPcController {
+
   constructor(private readonly myPcService: MyPcService) {}
 
   //*Renderiza el formulario para subir computadoras */
   @UseGuards(AuthenticatedGuard)
   @Get('submit')
   @Render('myPc/submitMyPc')
-  renderSubmitMyPc(@Req() req: IRequestFlash): MyPcFormErrosHbs {
+  renderSubmitMyPc(@Req() req: IRequestFlash) {
     const message = req.flash('messages') as MyPcFormErros;
-    return { message };
+    const userEmail = req.user['email']
+    return { message,userEmail };
   }
   /*Renderiza MisComputadoras */
   @UseGuards(AuthenticatedGuard)
   @Get('/:id?')
   @Render('myPc/main')
   async getMyPcs(@Req() req: IRequestUser, @Param('id', MyPcsPipe) id: number) {
-    return await this.myPcService.getAllMyPc(req.user, id);
+  
+    const allMyPc = await this.myPcService.getAllMyPc(req.user, id);
+    const userEmail = req.user.email;
+    return {allMyPc,userEmail}
+    
+    
   }
 
   //*Realiza la petición para subir la pc */
@@ -57,9 +64,10 @@ export class MyPcController {
   ) {
     await this.myPcService.submitMyPc(createMyPcDto, req.user);
 
-    res.redirect('/myPc/submit');
+    res.redirect('/myPc');
   }
   //*Realiza la petición para actualizar la pc */
+  @UseGuards(AuthenticatedGuard)
   @FormDataRequest()
   @Post('edit')
   async updateMyPc(
@@ -74,16 +82,20 @@ export class MyPcController {
     );
     res.redirect('/myPc/edit/' + updateMyPcDto.id);
   }
+  @UseGuards(AuthenticatedGuard)
   @Get('edit/:id')
   @Render('myPc/editMyPc')
   async updateRenderMyPc(@Param('id') id: string, @Req() req: IRequestUser) {
     const pc = await this.myPcService.findMyPc(id, req.user);
+    const userEmail = req.user.email;
     return {
       pc,
       id,
+      userEmail
     };
   }
   /* Borrar y redirecciona al menu*/
+  @UseGuards(AuthenticatedGuard)
   @Get('delete/:id')
   async deleteMyPc(
     @Param('id') id: string,
@@ -95,7 +107,7 @@ export class MyPcController {
   }
 
   //*Permite renderizar las imágenes */
-  @UseGuards(AuthenticatedGuard)
+  
   @Get('see/:imageName')
   findProductImage(
     @Res() res: Response,

@@ -15,6 +15,7 @@ import { fileNamer } from './helper/fileNamer.helper';
 import { saveImgDisk } from './helper/saveImgDisk.helper';
 import { ISessionUser } from 'src/common/interfaces/IRequestUser.interface';
 import { User } from 'src/auth/entities/user.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class MyPcService {
@@ -23,6 +24,7 @@ export class MyPcService {
     private readonly userModel: Model<User>,
     @InjectModel(MyPc.name)
     private readonly myPcModel: Model<MyPc>,
+    private configService: ConfigService
   ) {}
   /* Se encarga de la subida de pc*/
   async submitMyPc(createMyPcDto: CreateMyPcDto, user: any) {
@@ -77,12 +79,12 @@ export class MyPcService {
     }
 
     // Agregamos la url de las fotos
-    const baseImageUrl = process.env.URL;
+    const baseUrl = this.configService.get('URL')
     const pcsWithUrlImage = pcs.map((pc) => {
       const { image, _id, ...restoPc } = pc;
-      const urlImage = baseImageUrl + 'myPc/see/' + image;
-      const urlEditPc = baseImageUrl + 'myPc/edit/' + _id;
-      const urlDelete = baseImageUrl + 'myPc/delete/' + _id;
+      const urlImage = baseUrl + 'myPc/see/' + image;
+      const urlEditPc = baseUrl + 'myPc/edit/' + _id;
+      const urlDelete = baseUrl + 'myPc/delete/' + _id;
 
       return {
         ...restoPc,
@@ -99,6 +101,8 @@ export class MyPcService {
         isEnabledBtnNextPage,
       },
       pagination,
+      baseUrl
+      
     };
   }
 

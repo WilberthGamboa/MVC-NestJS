@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MyPc, MyPcSchema } from './entities/my-pc.entity';
 import { AuthModule } from 'src/auth/auth.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   controllers: [MyPcController],
@@ -18,6 +19,7 @@ import { NestjsFormDataModule } from 'nestjs-form-data';
     ]),
     AuthModule,
     NestjsFormDataModule,
+    ConfigModule
   ],
 })
 export class MyPcModule {}
