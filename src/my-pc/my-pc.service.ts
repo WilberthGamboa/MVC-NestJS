@@ -7,13 +7,14 @@ import {
 import { CreateMyPcDto } from './dto/create-my-pc.dto';
 import { UpdateMyPcDto } from './dto/update-my-pc.dto';
 import { Model, Types } from 'mongoose';
-import { User } from 'src/auth/entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { MyPc } from './entities/my-pc.entity';
 import { existsSync } from 'fs';
 import { join } from 'path';
 import { fileNamer } from './helper/fileNamer.helper';
 import { saveImgDisk } from './helper/saveImgDisk.helper';
+import { ISessionUser } from 'src/common/interfaces/IRequestUser.interface';
+import { User } from 'src/auth/entities/user.entity';
 
 @Injectable()
 export class MyPcService {
@@ -23,51 +24,47 @@ export class MyPcService {
     @InjectModel(MyPc.name)
     private readonly myPcModel: Model<MyPc>,
   ) {}
-
-  async submitMyPc(
-    createMyPcDto: CreateMyPcDto,
-    user:any
-  ) {
+  /* Se encarga de la subida de pc*/
+  async submitMyPc(createMyPcDto: CreateMyPcDto, user: any) {
     //TODO: Almacenar la imagen en disco
     const fileNameUuid = fileNamer(createMyPcDto.file.extension);
-    saveImgDisk(createMyPcDto.file,fileNameUuid);
+    saveImgDisk(createMyPcDto.file, fileNameUuid);
 
     try {
       const id = new Types.ObjectId(user._id);
-     const userEntity = {
+      const userEntity = {
         ...createMyPcDto,
         user: id,
         image: fileNameUuid,
       };
       await this.myPcModel.create(userEntity);
     } catch (error) {
-      console.log(error);
       this.handleDbException(error);
     }
-   
   }
-
-  async getAll(user, id:number) {
-    const limit = 3; 
+  /* Methods get pcs | pc */
+  async getAllMyPc(user: ISessionUser, id: number) {
+    const limit = 3;
     let isEnabledBtnPreviousPage = true;
     let isEnabledBtnNextPage = true;
     const pagination = {
-      currentPage:id,
-      nextPage:id+1,
-      previousPage:id-1
-    }
+      currentPage: id,
+      nextPage: id + 1,
+      previousPage: id - 1,
+    };
 
     // Obtenemos las pc
+
     const pcs = await this.myPcModel
-      .find({ user: new Types.ObjectId(user._id) })
+      .find({ user: new Types.ObjectId(user._id.toString()) })
       .lean()
       .limit(limit)
-      .skip((id - 1)*3);
+      .skip((id - 1) * 3);
     const nextPcs = await this.myPcModel
-      .find({ user: new Types.ObjectId(user._id) })
+      .find({ user: new Types.ObjectId(user._id.toString()) })
       .lean()
       .limit(limit)
-      .skip(id*3);
+      .skip(id * 3);
 
     //Desactivamos los botones
 
@@ -82,11 +79,10 @@ export class MyPcService {
     // Agregamos la url de las fotos
     const baseImageUrl = process.env.URL;
     const pcsWithUrlImage = pcs.map((pc) => {
-      // console.log(x);
-      const { image,_id, ...restoPc } = pc;
+      const { image, _id, ...restoPc } = pc;
       const urlImage = baseImageUrl + 'myPc/see/' + image;
       const urlEditPc = baseImageUrl + 'myPc/edit/' + _id;
-      const urlDelete = baseImageUrl + 'myPc/delete/' +_id;
+      const urlDelete = baseImageUrl + 'myPc/delete/' + _id;
 
       return {
         ...restoPc,
@@ -95,63 +91,43 @@ export class MyPcService {
         urlDelete,
       };
     });
-  
+
     return {
       pcsWithUrlImage,
       isEnabled: {
         isEnabledBtnPreviousPage,
         isEnabledBtnNextPage,
       },
-     pagination
+      pagination,
     };
   }
 
-  private handleDbException(error: any) {
-    if (error.code === 11000) {
-      throw new BadRequestException('Ya existe ');
-    } else {
-      throw new InternalServerErrorException(
-        `Cant create  - Check server logs`,
-      );
-    }
-  }
-
-  getStaticProductImage(imageName: string) {
-    const path = join(__dirname, '../../uploads/', imageName);
-    if (!existsSync(path)) {
-      throw new BadRequestException('No se encontró la imagen: ' + imageName);
-    }
-
-    return path;
-  }
-  async findMyPc(id:string,user){
+  async findMyPc(id: string, user: ISessionUser) {
     try {
-    const pc =  await this.myPcModel.findById(id);
-    if (pc.user.toString()!=user._id) {
-      throw new BadRequestException('La computadora no le pertenece');
-      
-    }
+      const pc = await this.myPcModel.findById(id);
+      if (pc.user.toString() != user._id) {
+        throw new BadRequestException('La computadora no le pertenece');
+      }
 
-    return pc;
+      return pc;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-
   }
-  async updateMyPc(id: string, user, updateMyPcDto: UpdateMyPcDto) {
-    let updateTemporal = {
-      
-    }
+  /* Actualizar una pc */
+  async updateMyPc(
+    id: string,
+    user: ISessionUser,
+    updateMyPcDto: UpdateMyPcDto,
+  ) {
+    let updateTemporal = {};
     updateTemporal = {
-      ...updateMyPcDto
-    }
+      ...updateMyPcDto,
+    };
     const pc = await this.findMyPc(id, user);
     if (pc) {
       if (updateMyPcDto.file) {
-       
-        const filePath = join(__dirname,'..','..','..','uploads',pc.image);
-
-    
+        const filePath = join(__dirname, '..', '..', '..', 'uploads', pc.image);
 
         fs.unlink(filePath, (err) => {
           if (err) {
@@ -161,22 +137,39 @@ export class MyPcService {
           }
         });
         const fileNameUuid = fileNamer(updateMyPcDto.file.extension);
-        saveImgDisk(updateMyPcDto.file,fileNameUuid);
-        
+        saveImgDisk(updateMyPcDto.file, fileNameUuid);
+
         updateTemporal = {
           ...updateMyPcDto,
           image: fileNameUuid,
-        }
-
+        };
+      }
+      await this.myPcModel.findByIdAndUpdate(pc.id, updateTemporal);
     }
-    await this.myPcModel.findByIdAndUpdate(pc.id,updateTemporal);
-   }
-
+  }
+  /* borrar una pc */
+  async deleteMyPc(id: string, user: ISessionUser) {
+    const pc = await this.findMyPc(id, user);
+    await this.myPcModel.deleteOne(pc._id);
   }
 
-  async deleteMyPc(id, user){
-    const pc = await this.findMyPc(id, user);
-    console.log(pc)
-    await this.myPcModel.deleteOne(pc._id)
+  /* Devuelve el path de la imagen */
+  getStaticProductImage(imageName: string): string {
+    const path = join(__dirname, '../../uploads/', imageName);
+    if (!existsSync(path)) {
+      throw new BadRequestException('No se encontró la imagen: ' + imageName);
+    }
+    return path;
+  }
+
+  /** Private methods */
+  private handleDbException(error: any) {
+    if (error.code === 11000) {
+      throw new BadRequestException('Ya existe');
+    } else {
+      throw new InternalServerErrorException(
+        `Cant create  - Check server logs`,
+      );
+    }
   }
 }

@@ -1,42 +1,13 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="utf-8" />
   <title>Mis Computadoras</title>
   {{> importaciones}}
-  <style>
-    h1.titulo {
-      color: #fff;
-      font-size: 1.15em;
-      font-weight: 900;
-      margin: 0 0 0.5em;
-      color: #505050;
-    }
-
-    @media (min-width: 450px) {
-      h1.titulo {
-        font-size: 3.55em;
-      }
-    }
-
-    @media (min-width: 760px) {
-      h1.titulo {
-        font-size: 3.05em;
-      }
-    }
-
-    @media (min-width: 900px) {
-      h1.titulo {
-        font-size: 3.25em;
-        margin: 0 0 0.3em;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="/styles/styleMainPcs.css">
 </head>
-
 <body>
-  {{> pcPartial}}
+  {{> main}}
   <h1 class="text-center titulo">PC's Cargadas</h1>
   <div class="container text-center mt-5">
     <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -52,6 +23,7 @@
             <a href={{urlDelete}}><input type="button" class="btn btn-danger" value="Eliminar"></a>
           </div>
         </div>
+      </div>
       {{/if}}
       {{/each}}
     </div>

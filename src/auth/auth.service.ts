@@ -33,7 +33,7 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.userModel.findOne({ email });
+    const user = await this.userModel.findOne({ email }, '-__v');
     console.log(user);
 
     if (!user || user?.password != password) {

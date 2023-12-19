@@ -4,19 +4,20 @@ import { HasMimeType, IsFile, MemoryStoredFile } from 'nestjs-form-data';
 import { IsOptional, ValidationArguments } from 'class-validator';
 
 export class UpdateMyPcDto extends PartialType(CreateMyPcDto) {
-    
-    id:string;
+  id: string;
 
-    @IsOptional()
-    nombre?: string;
+  @IsOptional()
+  nombre?: string;
 
-    @IsOptional()
-    descripcion?: string;
+  @IsOptional()
+  descripcion?: string;
 
-    @IsOptional()
-    @HasMimeType(['image/jpeg', 'image/png','image/webp'],{message : (validationArguments:ValidationArguments) =>{
-        return  `La imagen debe tener los siguientes formatos: ${validationArguments.constraints.toString()}`
-    }})
-    @IsFile({message:"La imagen es obligatoria"})
-    file?:MemoryStoredFile;
+  @IsOptional()
+  @HasMimeType(['image/jpeg', 'image/png', 'image/webp'], {
+    message: (validationArguments: ValidationArguments) => {
+      return `La imagen debe tener los siguientes formatos: ${validationArguments.constraints.toString()}`;
+    },
+  })
+  @IsFile({ message: 'La imagen es obligatoria' })
+  file?: MemoryStoredFile;
 }
