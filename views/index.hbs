@@ -32,7 +32,7 @@
     <ul class="pagination justify-content-center">
       {{#if allMyPc.isEnabled.isEnabledBtnPreviousPage}}
       <li class="page-item">
-        <a class="page-link" href="http://localhost:3000/{{allMyPc.pagination.previousPage}}">Anterior</a>
+        <a class="page-link" href=" {{allMyPc.baseUrl}}{{allMyPc.pagination.previousPage}}">Anterior</a>
       </li>
       {{/if}}
       <li class="page-item">
@@ -40,7 +40,7 @@
       </li>
       {{#if allMyPc.isEnabled.isEnabledBtnNextPage}}
       <li class="page-item">
-        <a class="page-link" href="http://localhost:3000/{{allMyPc.pagination.nextPage}}">Siguiente</a>
+        <a class="page-link" href="{{allMyPc.baseUrl}}{{allMyPc.pagination.nextPage}}">Siguiente</a>
       </li>
       {{/if}}
     </ul>

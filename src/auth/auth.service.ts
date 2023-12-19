@@ -8,7 +8,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './entities/user.entity';
 import { Model } from 'mongoose';
-
+import * as bycript from 'bcrypt'
 @Injectable()
 export class AuthService {
   users: {
@@ -25,7 +25,11 @@ export class AuthService {
 
   async createUser(createAuthDto: CreateUserDto) {
     try {
-      await this.userModel.create(createAuthDto);
+     const {password,...restData} = createAuthDto
+      await this.userModel.create({
+        ...restData,
+        password:bycript.hashSync(password,10)
+      });
     } catch (error) {
       console.log(error.code);
       this.handleDbException(error);
@@ -36,7 +40,7 @@ export class AuthService {
     const user = await this.userModel.findOne({ email }, '-__v');
     console.log(user);
 
-    if (!user || user?.password != password) {
+    if (!user ||  !bycript.compareSync(password,user?.password)) {
       throw new UnauthorizedException('Usuario o contraseña no válidos');
     }
     return user;

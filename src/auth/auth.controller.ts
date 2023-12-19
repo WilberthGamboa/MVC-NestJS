@@ -28,8 +28,8 @@ export class AuthController {
   renderRegister(@Req() req: IRequestFlash) {
     const messages: AuthFormErros = req.flash('messages');
     return {
-      messages,
-    };
+      messages
+    }
   }
   // * Envía información del registro
   @Post('register')

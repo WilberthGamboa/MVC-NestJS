@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { MyPc } from './my-pc/entities/my-pc.entity';
 import { Model } from 'mongoose';
 import { ISessionUser } from './common/interfaces/IRequestUser.interface';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AppService {
@@ -10,6 +11,8 @@ export class AppService {
        
         @InjectModel(MyPc.name)
         private readonly myPcModel: Model<MyPc>,
+        private configService: ConfigService
+        
       ) {}
     async getAllMyPc( id: number) {
         const limit = 3;
@@ -45,12 +48,13 @@ export class AppService {
         }
     
         // Agregamos la url de las fotos
-        const baseImageUrl = process.env.URL;
+        const baseUrl = this.configService.get('URL')
+        
         const pcsWithUrlImage = pcs.map((pc) => {
           const { image, _id, ...restoPc } = pc;
-          const urlImage = baseImageUrl + 'myPc/see/' + image;
-          const urlEditPc = baseImageUrl + 'myPc/edit/' + _id;
-          const urlDelete = baseImageUrl + 'myPc/delete/' + _id;
+          const urlImage = baseUrl + 'myPc/see/' + image;
+          const urlEditPc = baseUrl + 'myPc/edit/' + _id;
+          const urlDelete = baseUrl + 'myPc/delete/' + _id;
     
           return {
             ...restoPc,
@@ -67,6 +71,7 @@ export class AppService {
             isEnabledBtnNextPage,
           },
           pagination,
+          baseUrl
         };
       }
 }

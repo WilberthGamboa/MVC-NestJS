@@ -28,6 +28,7 @@ import { IRequestUser } from 'src/common/interfaces/IRequestUser.interface';
 @Controller('myPc')
 @UseFilters(MyPcExceptionFilter)
 export class MyPcController {
+
   constructor(private readonly myPcService: MyPcService) {}
 
   //*Renderiza el formulario para subir computadoras */
@@ -44,10 +45,9 @@ export class MyPcController {
   @Get('/:id?')
   @Render('myPc/main')
   async getMyPcs(@Req() req: IRequestUser, @Param('id', MyPcsPipe) id: number) {
-    
+  
     const allMyPc = await this.myPcService.getAllMyPc(req.user, id);
     const userEmail = req.user.email;
-  
     return {allMyPc,userEmail}
     
     
@@ -64,7 +64,7 @@ export class MyPcController {
   ) {
     await this.myPcService.submitMyPc(createMyPcDto, req.user);
 
-    res.redirect('/myPc/submit');
+    res.redirect('/myPc');
   }
   //*Realiza la petición para actualizar la pc */
   @UseGuards(AuthenticatedGuard)
