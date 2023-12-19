@@ -8,5 +8,42 @@
   <body>  
     {{> main}}
     {{ message }}
+    <h1 class="text-center titulo">PC's Cargadas</h1>
+  <div class="container text-center mt-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      {{#each allMyPc.pcsWithUrlImage}}
+      {{#if urlImage}}
+      <div class="col">
+        <div class="card h-100">
+          <img src={{urlImage}} class="card-img-top" width="auto" height="250px">
+          <div class="card-body">
+            <h5 class="card-title">{{nombre}}</h5>
+            <p class="card-text">{{descripcion}}</p>
+            <a href={{urlEditPc}}><input type="button" value="Editar" class="btn btn-primary"></a>
+            <a href={{urlDelete}}><input type="button" class="btn btn-danger" value="Eliminar"></a>
+          </div>
+        </div>
+      </div>
+      {{/if}}
+      {{/each}}
+    </div>
+  </div>
+  <nav class="mt-5">
+    <ul class="pagination justify-content-center">
+      {{#if allMyPc.isEnabled.isEnabledBtnPreviousPage}}
+      <li class="page-item">
+        <a class="page-link" href="http://localhost:3000/{{allMyPc.pagination.previousPage}}">Anterior</a>
+      </li>
+      {{/if}}
+      <li class="page-item">
+        <p class="page-link">{{allMyPc.pagination.currentPage}}</p>
+      </li>
+      {{#if allMyPc.isEnabled.isEnabledBtnNextPage}}
+      <li class="page-item">
+        <a class="page-link" href="http://localhost:3000/{{allMyPc.pagination.nextPage}}">Siguiente</a>
+      </li>
+      {{/if}}
+    </ul>
+  </nav>
   </body>
 </html>

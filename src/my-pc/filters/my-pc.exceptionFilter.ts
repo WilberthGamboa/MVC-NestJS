@@ -14,11 +14,11 @@ import { IRequestFlash } from 'src/common/interfaces/IRequeestFlash.interface';
 @Catch(HttpException)
 export class MyPcExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
-    // console.log(exception.cause);
+    console.log("holaxd")
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<IRequestFlash>();
-
+  
     const errorResponse = exception.getResponse() as {
       statusCode: number;
       message: string | string[];
