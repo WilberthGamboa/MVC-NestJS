@@ -1,23 +1,12 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="utf-8" />
   <title>App</title>
   {{> importaciones}}
-  <script>
-    var loadFile = function (event) {
-      var output = document.getElementById('output');
-      output.src = URL.createObjectURL(event.target.files[0]);
-      output.onload = function () {
-        URL.revokeObjectURL(output.src) // free memory
-      }
-    };
-  </script>
 </head>
-
 <body>
-  {{> pcPartial}}
+  {{> main}}
   <div class="container h-100">
     <div class="row justify-content-center align-items-center h-100">
       <div class="col-md-6">
@@ -25,7 +14,6 @@
           <div class="card-body">
             <h5 class="card-title">Nueva PC</h5>
             <form enctype="multipart/form-data" action="" method="post">
-
               <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
                 <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre">
@@ -35,7 +23,6 @@
                 {{/if}}
                 {{/each}}
               </div>
-
               <div class="mb-3">
                 <label for="descripcion" class="form-label">Descripción</label>
                 <textarea class="form-control" name="descripcion"
@@ -46,7 +33,6 @@
                 {{/if}}
                 {{/each}}
               </div>
-
               <div class="mb-3 text-center">
                 <div class="">
                   <img id="output" class="rounded mb-3" width="300px" height="auto">
@@ -73,5 +59,4 @@
     </div>
   </div>
 </body>
-
 </html>
