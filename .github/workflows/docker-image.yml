@@ -1,0 +1,53 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Git Semantic Version
+      uses: PaulHatch/semantic-version@v4.0.3
+      with:
+        major_pattern: "major:"
+        minor_pattern: "feat:"
+        format: "${major}.${minor}.${patch}-prerelease${increment}"
+      id: version
+            
+    - name: Docker login
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}   
+        DOCKER_PASSWORD : ${{ secrets.DOCKER_PASSWORD }} 
+
+        
+      run: |
+        echo "Iniciando login"
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        echo "Fin del login"
+        
+    - name: Build Docker Image
+      env:
+        NEW_VERSION: ${{steps.version.outputs.version}} 
+      run: |
+        docker build -t wilberthgamboa/mvc-nestjs:$NEW_VERSION .
+        docker build -t wilberthgamboa/mvc-nestjs:latest .
+
+    -  name: Push Docker Image
+       env:
+        NEW_VERSION: ${{steps.version.outputs.version}} 
+       run: | 
+        docker push wilberthgamboa/mvc-nestjs:$NEW_VERSION
+        docker push wilberthgamboa/mvc-nestjs:latest
+#    - name: Build the Docker image
+#      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)

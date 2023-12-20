@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>App</title>
+  {{> importaciones}}
+</head>
+<body>
+  {{> main}}
+  <div class="container h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <div class="col-md-6">
+        <div class="card mt-3">
+          <div class="card-body">
+            <h5 class="card-title">Nueva PC</h5>
+            <form enctype="multipart/form-data" action="/myPc/edit" method="post">
+              <div>
+                <input type="text" value={{id}} name="id" id="id" class="form-control" placeholder="ID" readonly hidden="true">
+              </div>
+              <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" name="nombre" id="nombre" value="{{pc.nombre}}" class="form-control" placeholder="Nombre">
+                {{#each message}}
+                {{#if nombre}}
+                <div class="alert alert-danger">{{nombre}}</div>
+                {{/if}}
+                {{/each}}
+              </div>
+              <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <textarea class="form-control" name="descripcion" placeholder="Describe cada uno de los componentes aquí" id="descripcion">{{pc.descripcion}}</textarea>
+                {{#each message}}
+                {{#if descripcion}}
+                <div class="alert alert-danger">{{descripcion}}</div>
+                {{/if}}
+                {{/each}}
+              </div>
+              <div class="mb-3 text-center">
+                <div class="">
+                  <img id="output" class="rounded mb-3" width="300px" height="auto">
+                </div>
+                <label for="file" class="form-label btn btn-success ms-3">Cargar imagen</i></label>
+                <input type="file" name="file" id="file" class="form-control" onchange="loadFile(event)" style="display: none;">
+                {{#each message}}
+                {{#if file}}
+                <div class="alert alert-danger">{{file}}</div>
+                {{/if}}
+                {{/each}}
+              </div>
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="submit" class="btn btn-dark" title="Subir PC">Guardar</button>
+                <a href="/myPc" class="btn btn-dark" title="Subir PC">Cancelar</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

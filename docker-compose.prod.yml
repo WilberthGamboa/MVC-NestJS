@@ -1,0 +1,22 @@
+version: '3'
+services:
+  app:
+    image: wilberthgamboa/mvc-nestjs:latest
+    container_name: mvc-nestjs
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      MONGODB: ${MONGODB}
+  db:
+    image: mongo:5
+    restart: always
+    ports: 
+      - 27017:27017
+    mem_limit: 1g
+    environment:
+      MONGODB_DATABASE: pcShare
+    volumes:
+      - ./mongo:/data/db
+    
